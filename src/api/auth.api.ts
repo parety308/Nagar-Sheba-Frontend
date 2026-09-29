@@ -1,4 +1,5 @@
 import apiClient from "@/lib/apiClient";
+import type { ApiResponse } from "@/types/api.type";
 import type {
   ForgotPasswordPayload,
   LoginPayload,
@@ -6,71 +7,76 @@ import type {
   ResetPasswordPayload,
   VerifyEmailPayload,
 } from "@/types/auth.type";
+import type { AuthTokens, AuthUser } from "@/types/user.type";
 
 export function userRegister(payload: RegisterPayload) {
-  return apiClient("/auth/register", {
+  return apiClient<ApiResponse<null>>("/auth/register", {
     method: "POST",
     body: payload,
   });
 }
 
 export function verifyEmail(payload: VerifyEmailPayload) {
-  return apiClient("/auth/verify-email", {
-    method: "POST",
-    body: payload,
-  });
+  return apiClient<ApiResponse<{ user: Pick<AuthUser, "id" | "email" | "role" | "status"> }>>(
+    "/auth/verify-email",
+    { method: "POST", body: payload },
+  );
 }
 
 export function userLogin(payload: LoginPayload) {
-  return apiClient("/auth/login", {
+  return apiClient<ApiResponse<AuthTokens>>("/auth/login", {
     method: "POST",
     body: payload,
   });
 }
 
 export function googleLogin(idToken: string) {
-  return apiClient("/auth/google-login", {
+  return apiClient<ApiResponse<AuthTokens>>("/auth/google-login", {
     method: "POST",
     body: { idToken },
   });
 }
 
 export function forgotPassword(payload: ForgotPasswordPayload) {
-  return apiClient("/auth/forgot-password", {
+  return apiClient<ApiResponse<null>>("/auth/forgot-password", {
     method: "POST",
     body: payload,
   });
 }
 
 export function resetPassword(payload: ResetPasswordPayload) {
-  return apiClient("/auth/reset-password", {
+  return apiClient<ApiResponse<null>>("/auth/reset-password", {
     method: "POST",
     body: payload,
   });
 }
 
 export function userProfile() {
-  return apiClient("/auth/me", {
-    method: "GET",
-  });
+  return apiClient<ApiResponse<AuthUser>>("/auth/me", { method: "GET" });
 }
 
 export function updateProfile(payload: Record<string, string>) {
-  return apiClient("/auth/me", {
+  return apiClient<ApiResponse<Pick<AuthUser, "id" | "email">>>("/auth/me", {
     method: "PATCH",
     body: payload,
   });
 }
 
+export function updateProfileImage(formData: FormData) {
+  // field name must be "profileImage" (image/*, max 5MB)
+  return apiClient<ApiResponse<{ id: string; profileImage: string }>>(
+    "/auth/me/profile-image",
+    { method: "PATCH", body: formData },
+  );
+}
+
 export function refreshToken(refreshToken?: string) {
-  return apiClient("/auth/refresh-token", {
+  return apiClient<ApiResponse<AuthTokens>>("/auth/refresh-token", {
     method: "POST",
     body: refreshToken ? { refreshToken } : undefined,
   });
 }
 
 export function userLogOut() {
-  return apiClient("/auth/logout", {
-    method: "POST",
-  });
+  return apiClient<ApiResponse<null>>("/auth/logout", { method: "POST" });
 }

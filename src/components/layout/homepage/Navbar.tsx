@@ -1,5 +1,6 @@
 "use client";
-
+import { getRoleHome } from "@/lib/roles";
+import { getDisplayName } from "@/lib/user";
 import { Menu, ShieldCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -98,12 +99,12 @@ export default function Navbar() {
           ) : isLoggedIn ? (
             <>
               <Link
-                href="/profile"
+                href={getRoleHome(profile.role)} 
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
                 <UserRound className="size-4" />
                 <span className="max-w-28 truncate">
-                  {profile?.fullName || "Profile"}
+                  {getDisplayName(profile) || "Dashboard"}  
                 </span>
               </Link>
 
@@ -191,7 +192,7 @@ export default function Navbar() {
                     className="flex h-10 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors hover:bg-muted"
                   >
                     <UserRound className="size-4" />
-                    {profile?.fullName || "My Profile"}
+                    {getDisplayName(profile) || "Dashboard"} 
                   </Link>
 
                   <Button

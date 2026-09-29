@@ -13,20 +13,53 @@ import {
   Verified,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLogin } from "@/hook";
+import { getApiErrorMessage } from "@/lib/api-error";
+import { getRoleHome } from "@/lib/roles";
+import type { LoginPayload } from "@/types/auth.type";
 import { LoginZodSchema } from "@/validation";
 import { Button } from "../ui/button";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
+import DemoLoginPanel from "./DemoLoginPanel";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { mutate: login, isPending: loginPending } = useLogin();
+
+  const submitLogin = (credentials: LoginPayload) => {
+    login(credentials, {
+      onSuccess: (user) => {
+        toast.success("Welcome Back!", {
+          description: "You have successfully signed in to Nagar Sheba.",
+        });
+
+        // Only allow same-site relative redirects (prevents open redirect)
+        const redirect = searchParams.get("redirect");
+        const safeRedirect =
+          redirect?.startsWith("/") && !redirect.startsWith("//")
+            ? redirect
+            : null;
+
+        router.replace(safeRedirect ?? getRoleHome(user.role));
+        router.refresh();
+      },
+      onError: (error) => {
+        toast.error("Sign in failed", {
+          description: getApiErrorMessage(
+            error,
+            "The credentials entered do not match our records.",
+          ),
+        });
+      },
+    });
+  };
 
   const form = useForm({
     defaultValues: {
@@ -37,28 +70,9 @@ export default function LoginForm() {
       onSubmit: LoginZodSchema,
     },
     onSubmit: ({ value }) => {
-      login(
-        {
-          email: value.email,
-          password: value.password,
-        },
-        {
-          onSuccess: () => {
-            toast.success("Welcome Back!", {
-              description: "You have successfully signed in to Nagar Sheba.",
-            });
-            router.push("/");
-          },
-          onError: () => {
-            toast.error("Authentication Denied", {
-              description: "The credentials entered do not match our records.",
-            });
-          },
-        },
-      );
+      submitLogin({ email: value.email, password: value.password });
     },
   });
-
   return (
     <div className="w-full rounded-xl bg-card/90 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
       <div className="mb-6 flex items-start justify-between gap-4">
@@ -274,6 +288,7 @@ export default function LoginForm() {
           .
         </p>
       </form>
+       <DemoLoginPanel pending={loginPending} onSelect={submitLogin} />
     </div>
   );
 }
