@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
+import RegisterForm from "@/components/form/RegisterForm";
+
+export const metadata: Metadata = {
+  title: "Create account",
+  description: "Create a Nagar Sheba citizen account.",
+};
+
 export default function RegisterPage() {
-  return (
-    <div>
-      <h1>This is Register Page Component</h1>
-    </div>
-  );
+  return <RegisterForm />;
 }
