@@ -28,10 +28,7 @@ export function createDepartment(payload: CreateDepartmentPayload) {
   });
 }
 
-export function updateDepartment(
-  id: string,
-  payload: UpdateDepartmentPayload,
-) {
+export function updateDepartment(id: string, payload: UpdateDepartmentPayload) {
   return apiClient(`/departments/${id}`, {
     method: "PATCH",
     body: payload,

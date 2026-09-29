@@ -1,13 +1,22 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  Badge,
+  Eye,
+  EyeOff,
+  KeyRound,
+  LockKeyhole,
+  Mail,
+  UserPlus,
+  Verified,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-
-import { useLogin } from "@/hooks";
+import { useLogin } from "@/hook";
 import { LoginZodSchema } from "@/validation";
 import { Button } from "../ui/button";
 import { Field, FieldError, FieldLabel } from "../ui/field";
@@ -16,7 +25,6 @@ import { Spinner } from "../ui/spinner";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-
   const router = useRouter();
   const { mutate: login, isPending: loginPending } = useLogin();
 
@@ -36,14 +44,14 @@ export default function LoginForm() {
         },
         {
           onSuccess: () => {
-            toast.success("Welcome back!", {
-              description: "You have successfully signed in.",
+            toast.success("Welcome Back!", {
+              description: "You have successfully signed in to Nagar Sheba.",
             });
             router.push("/");
           },
           onError: () => {
-            toast.error("Unable to sign in", {
-              description: "Please check your email and password.",
+            toast.error("Authentication Denied", {
+              description: "The credentials entered do not match our records.",
             });
           },
         },
@@ -52,20 +60,36 @@ export default function LoginForm() {
   });
 
   return (
-    <div className="w-full space-y-7">
-      <div className="space-y-3">
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-          <LockKeyhole className="size-6 text-primary" />
+    <div className="w-full rounded-xl bg-card/90 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex size-12 items-center justify-center rounded-lg bg-muted p-2 shadow-inner">
+            <div className="flex size-full items-center justify-center rounded-md bg-primary/10">
+              <Badge className="size-6 text-primary" />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-semibold tracking-tight">
+                Citizen Sign In
+              </h1>
+              <Verified
+                className="size-4 text-primary"
+                aria-label="Secured authentication"
+              />
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Access Smart City Dhaka utilities & records
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Sign in to your account
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Access your Nagar Sheba account and manage your city services.
-          </p>
-        </div>
+        <span className="inline-flex shrink-0 items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+          <span className="size-1.5 animate-ping rounded-full bg-primary" />
+          2.0 LIVE
+        </span>
       </div>
 
       <form
@@ -73,7 +97,8 @@ export default function LoginForm() {
           event.preventDefault();
           form.handleSubmit();
         }}
-        className="space-y-5"
+        className="flex flex-col gap-5"
+        noValidate
       >
         <form.Field name="email">
           {(field) => {
@@ -81,8 +106,20 @@ export default function LoginForm() {
               field.state.meta.isTouched && !field.state.meta.isValid;
 
             return (
-              <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>Email address</FieldLabel>
+              <Field data-invalid={isInvalid} className="space-y-1.5">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="flex items-center justify-between text-sm font-medium"
+                >
+                  <span className="flex items-center gap-1.5">
+                    Email Address
+                    <span className="text-primary">*</span>
+                  </span>
+
+                  <span className="text-[10px] font-normal text-muted-foreground">
+                    Registered email
+                  </span>
+                </FieldLabel>
 
                 <div className="relative">
                   <Mail className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -91,19 +128,16 @@ export default function LoginForm() {
                     id={field.name}
                     name={field.name}
                     type="email"
+                    autoComplete="email"
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={(event) =>
-                      field.handleChange(event.target.value)
-                    }
-                    placeholder="you@example.com"
-                    className="h-12 pl-10"
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    placeholder="citizen@example.com"
+                    className="h-11 pl-10"
                   />
                 </div>
 
-                {isInvalid && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             );
           }}
@@ -115,13 +149,19 @@ export default function LoginForm() {
               field.state.meta.isTouched && !field.state.meta.isValid;
 
             return (
-              <Field data-invalid={isInvalid} className="space-y-2">
+              <Field data-invalid={isInvalid} className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <FieldLabel
+                    htmlFor={field.name}
+                    className="flex items-center gap-1.5 text-sm font-medium"
+                  >
+                    Secured Password
+                    <span className="text-primary">*</span>
+                  </FieldLabel>
 
                   <Link
                     href="/forgot-password"
-                    className="text-xs font-medium text-primary hover:underline"
+                    className="text-xs text-primary underline-offset-4 transition-colors hover:underline"
                   >
                     Forgot password?
                   </Link>
@@ -135,18 +175,17 @@ export default function LoginForm() {
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={(event) =>
-                      field.handleChange(event.target.value)
-                    }
-                    placeholder="Enter your password"
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    placeholder="••••••••••••"
                     type={showPassword ? "text" : "password"}
-                    className="h-12 pr-11 pl-10"
+                    autoComplete="current-password"
+                    className="h-11 pr-11 pl-10"
                   />
 
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="absolute top-1/2 right-2.5 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
@@ -159,18 +198,34 @@ export default function LoginForm() {
                   </button>
                 </div>
 
-                {isInvalid && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             );
           }}
         </form.Field>
 
+        <div className="flex items-center justify-between gap-4">
+          <label className="flex cursor-pointer select-none items-center gap-2">
+            <input
+              type="checkbox"
+              defaultChecked
+              className="size-4 cursor-pointer accent-primary"
+            />
+            <span className="text-xs text-muted-foreground">
+              Remember on this device
+            </span>
+          </label>
+
+          <span className="flex items-center gap-1 text-xs text-secondary">
+            <KeyRound className="size-3.5" />
+            Secure Login
+          </span>
+        </div>
+
         <Button
           disabled={loginPending}
           type="submit"
-          className="group h-12 w-full text-sm font-semibold"
+          className="group mt-1 h-11 w-full gap-2 text-sm font-semibold shadow-lg shadow-primary/20"
         >
           {loginPending ? (
             <>
@@ -179,39 +234,46 @@ export default function LoginForm() {
             </>
           ) : (
             <>
-              Sign in
+              Sign In to Nagar Sheba
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </>
           )}
         </Button>
-      </form>
 
-      <div className="relative flex items-center">
-        <div className="h-px flex-1 bg-border" />
-        <span className="px-4 text-xs text-muted-foreground">
-          New to Nagar Sheba?
-        </span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
+        <div className="mt-2 flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs text-muted-foreground">
+            New to Nagar Sheba?
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
 
-      <Button variant="outline" className="h-12 w-full" asChild>
-        <Link href="/register">Create a new account</Link>
-      </Button>
-
-      <p className="text-center text-xs leading-5 text-muted-foreground">
-        By continuing, you agree to our{" "}
-        <Link href="/terms" className="font-medium text-primary hover:underline">
-          Terms of Service
-        </Link>{" "}
-        and{" "}
         <Link
-          href="/privacy"
-          className="font-medium text-primary hover:underline"
+          href="/register"
+          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-transparent px-4 text-sm font-medium transition-colors hover:bg-muted"
         >
-          Privacy Policy
+          <UserPlus className="size-4 text-primary" />
+          Create a new citizen account
         </Link>
-        .
-      </p>
+
+        <p className="mt-1 text-center text-xs leading-5 text-muted-foreground">
+          By continuing, you agree to our{" "}
+          <Link
+            href="/terms"
+            className="text-foreground underline underline-offset-2 transition-colors hover:text-primary"
+          >
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/privacy"
+            className="text-foreground underline underline-offset-2 transition-colors hover:text-primary"
+          >
+            Digital Civic Privacy Policy
+          </Link>
+          .
+        </p>
+      </form>
     </div>
   );
 }

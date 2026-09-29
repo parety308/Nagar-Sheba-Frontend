@@ -29,10 +29,7 @@ export function getAdminUsers(params?: {
   });
 }
 
-export function updateUserStatus(
-  id: string,
-  status: "ACTIVE" | "BLOCKED",
-) {
+export function updateUserStatus(id: string, status: "ACTIVE" | "BLOCKED") {
   return apiClient(`/admin/users/${id}/status`, {
     method: "PATCH",
     body: { status },

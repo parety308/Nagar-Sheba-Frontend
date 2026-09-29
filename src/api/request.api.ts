@@ -85,10 +85,7 @@ export function reopenRequest(
   });
 }
 
-export function addRequestAttachments(
-  id: string,
-  formData: FormData,
-) {
+export function addRequestAttachments(id: string, formData: FormData) {
   return apiClient(`/requests/${id}/attachments`, {
     method: "POST",
     body: formData,
