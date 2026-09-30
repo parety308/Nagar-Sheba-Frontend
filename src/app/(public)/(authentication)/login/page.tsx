@@ -5,7 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to Nagar Sheba to report and track city service requests.",
+  description:
+    "Sign in to Nagar Sheba to report and track city service requests.",
 };
 
 export default function LoginPage() {

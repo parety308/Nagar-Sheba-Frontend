@@ -20,15 +20,22 @@ export default function GlobalError({
       <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-destructive/10">
         <TriangleAlert className="size-8 text-destructive" />
       </div>
-      <h1 className="text-2xl font-bold tracking-tight">Something went wrong</h1>
+      <h1 className="text-2xl font-bold tracking-tight">
+        Something went wrong
+      </h1>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
-        An unexpected error occurred. You can try again or return to the home page.
+        An unexpected error occurred. You can try again or return to the home
+        page.
       </p>
       <div className="mt-6 flex gap-3">
         <Button className="h-10 px-4" onClick={reset}>
           Try again
         </Button>
-        <Button variant="outline" className="h-10 px-4" onClick={() => (window.location.href = "/")}>
+        <Button
+          variant="outline"
+          className="h-10 px-4"
+          onClick={() => (window.location.href = "/")}
+        >
           Go home
         </Button>
       </div>

@@ -1,6 +1,4 @@
 "use client";
-import { getRoleHome } from "@/lib/roles";
-import { getDisplayName } from "@/lib/user";
 import { Menu, ShieldCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,14 +6,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useLogOut, useProfile } from "@/hook";
+import { getRoleHome } from "@/lib/roles";
+import { getDisplayName } from "@/lib/user";
 
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Services", href: "/services" },
   { name: "About Us", href: "/about-us" },
+  { name: "FAQ", href: "/faq" },
   { name: "Contact", href: "/contact" },
 ];
-
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -99,12 +99,12 @@ export default function Navbar() {
           ) : isLoggedIn ? (
             <>
               <Link
-                href={getRoleHome(profile.role)} 
+                href={getRoleHome(profile.role)}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
                 <UserRound className="size-4" />
                 <span className="max-w-28 truncate">
-                  {getDisplayName(profile) || "Dashboard"}  
+                  {getDisplayName(profile) || "Dashboard"}
                 </span>
               </Link>
 
@@ -192,7 +192,7 @@ export default function Navbar() {
                     className="flex h-10 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors hover:bg-muted"
                   >
                     <UserRound className="size-4" />
-                    {getDisplayName(profile) || "Dashboard"} 
+                    {getDisplayName(profile) || "Dashboard"}
                   </Link>
 
                   <Button

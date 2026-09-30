@@ -17,10 +17,9 @@ export function userRegister(payload: RegisterPayload) {
 }
 
 export function verifyEmail(payload: VerifyEmailPayload) {
-  return apiClient<ApiResponse<{ user: Pick<AuthUser, "id" | "email" | "role" | "status"> }>>(
-    "/auth/verify-email",
-    { method: "POST", body: payload },
-  );
+  return apiClient<
+    ApiResponse<{ user: Pick<AuthUser, "id" | "email" | "role" | "status"> }>
+  >("/auth/verify-email", { method: "POST", body: payload });
 }
 
 export function userLogin(payload: LoginPayload) {

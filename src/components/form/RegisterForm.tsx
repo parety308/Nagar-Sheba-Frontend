@@ -15,11 +15,41 @@ import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 
 const FIELDS = [
-  { name: "fullName", label: "Full Name", type: "text", placeholder: "Your full name", autoComplete: "name" },
-  { name: "email", label: "Email Address", type: "email", placeholder: "citizen@example.com", autoComplete: "email" },
-  { name: "phone", label: "Phone Number", type: "tel", placeholder: "01XXXXXXXXX", autoComplete: "tel" },
-  { name: "address", label: "Address", type: "text", placeholder: "House, Road, Area", autoComplete: "street-address" },
-  { name: "password", label: "Password", type: "password", placeholder: "••••••••••••", autoComplete: "new-password" },
+  {
+    name: "fullName",
+    label: "Full Name",
+    type: "text",
+    placeholder: "Your full name",
+    autoComplete: "name",
+  },
+  {
+    name: "email",
+    label: "Email Address",
+    type: "email",
+    placeholder: "citizen@example.com",
+    autoComplete: "email",
+  },
+  {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    placeholder: "01XXXXXXXXX",
+    autoComplete: "tel",
+  },
+  {
+    name: "address",
+    label: "Address",
+    type: "text",
+    placeholder: "House, Road, Area",
+    autoComplete: "street-address",
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "••••••••••••",
+    autoComplete: "new-password",
+  },
 ] as const;
 
 export default function RegisterForm() {
@@ -81,7 +111,10 @@ export default function RegisterForm() {
 
               return (
                 <Field data-invalid={isInvalid} className="space-y-1.5">
-                  <FieldLabel htmlFor={field.name} className="text-sm font-medium">
+                  <FieldLabel
+                    htmlFor={field.name}
+                    className="text-sm font-medium"
+                  >
                     {item.label} <span className="text-primary">*</span>
                   </FieldLabel>
 
@@ -101,7 +134,9 @@ export default function RegisterForm() {
                       <button
                         type="button"
                         onClick={() => setShowPassword((p) => !p)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                         className="absolute top-1/2 right-2.5 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
                       >
                         {showPassword ? (
@@ -140,7 +175,10 @@ export default function RegisterForm() {
 
         <p className="text-center text-xs text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary underline-offset-4 hover:underline">
+          <Link
+            href="/login"
+            className="text-primary underline-offset-4 hover:underline"
+          >
             Sign in
           </Link>
         </p>

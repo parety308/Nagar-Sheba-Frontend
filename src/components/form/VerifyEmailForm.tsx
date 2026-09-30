@@ -62,7 +62,9 @@ export default function VerifyEmailForm() {
         <div className="mb-3 flex size-12 items-center justify-center rounded-full bg-primary/10">
           <MailCheck className="size-6 text-primary" />
         </div>
-        <h1 className="text-xl font-semibold tracking-tight">Verify your email</h1>
+        <h1 className="text-xl font-semibold tracking-tight">
+          Verify your email
+        </h1>
         <p className="mt-1 text-xs text-muted-foreground">
           Enter the 6-digit code sent to{" "}
           <span className="font-medium text-foreground">{email}</span>
@@ -84,7 +86,10 @@ export default function VerifyEmailForm() {
 
             return (
               <Field data-invalid={isInvalid} className="space-y-1.5">
-                <FieldLabel htmlFor={field.name} className="text-sm font-medium">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-sm font-medium"
+                >
                   Verification Code
                 </FieldLabel>
                 <Input
@@ -120,7 +125,10 @@ export default function VerifyEmailForm() {
 
         <p className="text-center text-xs text-muted-foreground">
           Code expired or wrong email?{" "}
-          <Link href="/register" className="text-primary underline-offset-4 hover:underline">
+          <Link
+            href="/register"
+            className="text-primary underline-offset-4 hover:underline"
+          >
             Register again
           </Link>
         </p>

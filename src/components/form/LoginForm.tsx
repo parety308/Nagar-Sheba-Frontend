@@ -288,7 +288,7 @@ export default function LoginForm() {
           .
         </p>
       </form>
-       <DemoLoginPanel pending={loginPending} onSelect={submitLogin} />
+      <DemoLoginPanel pending={loginPending} onSelect={submitLogin} />
     </div>
   );
 }

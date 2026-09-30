@@ -6,5 +6,6 @@ export * from "./department.type";
 export * from "./feedback.type";
 export * from "./notification.type";
 export * from "./payment.type";
+export * from "./public.type";
 export * from "./request.type";
 export * from "./user.type";

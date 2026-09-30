@@ -5,5 +5,10 @@ export type Feedback = {
   rating: number;
   comment: string | null;
   createdAt: string;
-  request?: { id: string; trackingRef: string; title: string; departmentId: string };
+  request?: {
+    id: string;
+    trackingRef: string;
+    title: string;
+    departmentId: string;
+  };
 };

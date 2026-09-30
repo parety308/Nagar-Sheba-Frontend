@@ -56,7 +56,12 @@ export type ServiceRequest = {
   cancelledAt: string | null;
   createdAt: string;
   updatedAt: string;
-  category?: { id: string; name: string; feeType?: "FREE" | "PAID"; slaHours?: number };
+  category?: {
+    id: string;
+    name: string;
+    feeType?: "FREE" | "PAID";
+    slaHours?: number;
+  };
   department?: { id: string; name: string };
   attachments?: Attachment[];
   statusHistory?: StatusHistoryItem[];

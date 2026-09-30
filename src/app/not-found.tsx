@@ -14,7 +14,10 @@ export default function NotFound() {
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
         The page you are looking for doesn't exist or has been moved.
       </p>
-      <Link href="/" className={cn(buttonVariants({ size: "lg" }), "mt-6 h-10 px-4")}>
+      <Link
+        href="/"
+        className={cn(buttonVariants({ size: "lg" }), "mt-6 h-10 px-4")}
+      >
         Back to home
       </Link>
     </div>

@@ -32,7 +32,12 @@ export function useUrlState() {
       const params = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(updates)) {
-        if (value === undefined || value === null || value === "" || value === "all") {
+        if (
+          value === undefined ||
+          value === null ||
+          value === "" ||
+          value === "all"
+        ) {
           params.delete(key);
         } else {
           params.set(key, String(value));

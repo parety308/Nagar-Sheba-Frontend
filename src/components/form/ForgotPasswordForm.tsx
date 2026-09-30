@@ -67,7 +67,10 @@ export default function ForgotPasswordForm() {
               field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-1.5">
-                <FieldLabel htmlFor={field.name} className="text-sm font-medium">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-sm font-medium"
+                >
                   Email Address
                 </FieldLabel>
                 <Input

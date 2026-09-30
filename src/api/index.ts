@@ -5,4 +5,5 @@ export * from "./department.api";
 export * from "./feedback.api";
 export * from "./notification.api";
 export * from "./payment.api";
+export * from "./public.api";
 export * from "./request.api";

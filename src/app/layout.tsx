@@ -54,9 +54,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <QueryProvider>
-  <div className="flex-1">{children}</div>
-  <Toaster position="top-right" richColors />
-</QueryProvider>
+          <div className="flex-1">{children}</div>
+          <Toaster position="top-right" richColors />
+        </QueryProvider>
       </body>
     </html>
   );

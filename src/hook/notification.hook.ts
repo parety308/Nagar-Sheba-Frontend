@@ -15,10 +15,12 @@ export function useNotifications(
   });
 }
 
+/** Polls every 30s so the bell badge stays fresh without websockets. */
 export function useUnreadNotificationCount() {
   return useQuery({
     queryKey: ["notifications", "unread-count"],
     queryFn: getUnreadNotificationCount,
+    refetchInterval: 30_000,
   });
 }
 
@@ -28,9 +30,7 @@ export function useMarkNotificationAsRead() {
   return useMutation({
     mutationFn: markNotificationAsRead,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["notifications"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 }
@@ -41,9 +41,7 @@ export function useMarkAllNotificationsAsRead() {
   return useMutation({
     mutationFn: markAllNotificationsAsRead,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["notifications"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 }

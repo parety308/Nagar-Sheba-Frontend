@@ -20,6 +20,8 @@ export type CreateCategoryPayload = {
   slaHours: number;
 };
 
-export type UpdateCategoryPayload = Partial<Omit<CreateCategoryPayload, "departmentId">> & {
+export type UpdateCategoryPayload = Partial<
+  Omit<CreateCategoryPayload, "departmentId">
+> & {
   isActive?: boolean;
 };

@@ -32,7 +32,11 @@ export type AuditLog = {
 
 export type DashboardStats = {
   users: { total: number; citizens: number; staff: number };
-  requests: { total: number; overdue: number; byStatus: Record<string, number> };
+  requests: {
+    total: number;
+    overdue: number;
+    byStatus: Record<string, number>;
+  };
   payments: { totalRevenue: string | number; pending: number };
   feedback: { averageRating: number | null };
 };

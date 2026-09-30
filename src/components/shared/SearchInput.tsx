@@ -8,7 +8,10 @@ import { useUrlState } from "@/hook/useUrlState";
 
 type Props = { paramKey?: string; placeholder?: string };
 
-export function SearchInput({ paramKey = "search", placeholder = "Search..." }: Props) {
+export function SearchInput({
+  paramKey = "search",
+  placeholder = "Search...",
+}: Props) {
   const { get, setParams } = useUrlState();
   const [value, setValue] = useState(get(paramKey));
   const debounced = useDebounce(value, 400);

@@ -5,6 +5,7 @@ export * from "./department.hook";
 export * from "./feedback.hook";
 export * from "./notification.hook";
 export * from "./payment.hook";
+export * from "./public.hook";
 export * from "./request.hook";
 export * from "./useDebounce";
 export * from "./useUrlState";

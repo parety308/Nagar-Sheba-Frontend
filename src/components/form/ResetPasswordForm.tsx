@@ -87,7 +87,10 @@ export default function ResetPasswordForm() {
               field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-1.5">
-                <FieldLabel htmlFor={field.name} className="text-sm font-medium">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-sm font-medium"
+                >
                   Verification Code
                 </FieldLabel>
                 <Input
@@ -116,7 +119,10 @@ export default function ResetPasswordForm() {
               field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-1.5">
-                <FieldLabel htmlFor={field.name} className="text-sm font-medium">
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-sm font-medium"
+                >
                   New Password
                 </FieldLabel>
                 <div className="relative">

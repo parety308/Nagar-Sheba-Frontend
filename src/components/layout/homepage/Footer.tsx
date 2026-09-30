@@ -12,12 +12,12 @@ const footerLinks = {
   citizen: [
     { name: "Login", href: "/login" },
     { name: "Create Account", href: "/register" },
-    { name: "My Profile", href: "/profile" },
-    { name: "My Requests", href: "/requests" },
+    { name: "My Dashboard", href: "/citizen" },
+    { name: "My Requests", href: "/citizen/requests" },
   ],
   support: [
-    { name: "Help Center", href: "/help" },
     { name: "FAQ", href: "/faq" },
+    { name: "Contact", href: "/contact" },
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
   ],
