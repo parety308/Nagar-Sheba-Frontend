@@ -26,10 +26,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nagar Sheba",
+  title: { default: "Nagar Sheba", template: "%s | Nagar Sheba" },
   description: "Smart City Services for Citizens",
+  openGraph: {
+    title: "Nagar Sheba",
+    description: "Report civic issues, pay service fees and track requests.",
+    type: "website",
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,9 +54,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <QueryProvider>
-          <main className="flex-1">{children}</main>
-          <Toaster position="top-right" richColors />
-        </QueryProvider>
+  <div className="flex-1">{children}</div>
+  <Toaster position="top-right" richColors />
+</QueryProvider>
       </body>
     </html>
   );

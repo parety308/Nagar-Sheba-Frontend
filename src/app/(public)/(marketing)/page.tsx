@@ -1,12 +1,7 @@
-import Footer from "@/components/layout/homepage/Footer";
-import Navbar from "@/components/layout/homepage/Navbar";
-
 export default function HomePage() {
   return (
-    <div>
-      <Navbar />
-      <h1>This is HomePage Component</h1>
-      <Footer />
-    </div>
+    <section className="mx-auto max-w-7xl px-4 py-20">
+      <h1 className="text-3xl font-bold">Nagar Sheba</h1>
+    </section>
   );
 }

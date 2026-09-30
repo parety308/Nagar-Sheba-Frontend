@@ -4,9 +4,12 @@ export type Category = {
   id: string;
   name: string;
   feeType: FeeType;
-  feeAmount?: string;
+  feeAmount: string | null;
   slaHours: number;
-  departmentId?: string;
+  isActive: boolean;
+  departmentId: string;
+  createdAt: string;
+  department?: { id: string; name: string };
 };
 
 export type CreateCategoryPayload = {
@@ -17,6 +20,6 @@ export type CreateCategoryPayload = {
   slaHours: number;
 };
 
-export type UpdateCategoryPayload = Partial<CreateCategoryPayload> & {
+export type UpdateCategoryPayload = Partial<Omit<CreateCategoryPayload, "departmentId">> & {
   isActive?: boolean;
 };
