@@ -1,23 +1,33 @@
+import { FilePlus } from "lucide-react";
 import type { Metadata } from "next";
-import NewRequestWizard from "@/components/request/NewRequestWizard";
+import Link from "next/link";
+import { Suspense } from "react";
+import { RequestList } from "@/components/request/RequestList";
+import { RequestListSkeleton } from "@/components/request/skeletons";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { getPublicCategories } from "@/lib/server-api";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "New request" };
+export const metadata: Metadata = { title: "My requests" };
 
-type Props = { searchParams: Promise<{ category?: string }> };
-
-export default async function NewRequestPage({ searchParams }: Props) {
-  const { category } = await searchParams;
-  const categories = await getPublicCategories();
-
+export default function CitizenRequestsPage() {
   return (
     <>
       <PageHeader
-        title="New request"
-        description="Report an issue or apply for a permit in four short steps."
+        title="My requests"
+        description="Track every issue and permit you have filed."
+        actions={
+          <Link
+            href="/citizen/requests/new"
+            className={cn(buttonVariants(), "h-9 gap-2 px-4")}
+          >
+            <FilePlus className="size-4" /> New request
+          </Link>
+        }
       />
-      <NewRequestWizard categories={categories} initialCategoryId={category} />
+      <Suspense fallback={<RequestListSkeleton />}>
+        <RequestList basePath="/citizen/requests" canCreate />
+      </Suspense>
     </>
   );
 }

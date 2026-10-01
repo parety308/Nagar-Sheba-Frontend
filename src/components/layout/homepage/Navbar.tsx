@@ -187,7 +187,7 @@ export default function Navbar() {
               ) : isLoggedIn ? (
                 <div className="flex flex-col gap-2">
                   <Link
-                    href="/profile"
+                    href={getRoleHome(profile.role)}
                     onClick={closeMobileMenu}
                     className="flex h-10 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors hover:bg-muted"
                   >
