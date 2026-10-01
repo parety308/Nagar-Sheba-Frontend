@@ -1,17 +1,20 @@
 import apiClient from "@/lib/apiClient";
+import type { ApiResponse } from "@/types/api.type";
+import type { Payment } from "@/types/payment.type";
+import type { PaymentSession } from "@/types/request.type";
 
 export function initiatePayment(payload: {
   requestId: string;
   provider: "SSLCOMMERZ" | "BKASH";
 }) {
-  return apiClient("/payments/initiate", {
+  return apiClient<ApiResponse<PaymentSession>>("/payments/initiate", {
     method: "POST",
     body: payload,
   });
 }
 
 export function getPayment(id: string) {
-  return apiClient(`/payments/${id}`, {
+  return apiClient<ApiResponse<Payment>>(`/payments/${id}`, {
     method: "GET",
   });
 }
@@ -24,19 +27,14 @@ export function getPayments(params?: {
   sortBy?: "createdAt" | "amount" | "status";
   sortOrder?: "asc" | "desc";
 }) {
-  return apiClient("/payments", {
+  return apiClient<ApiResponse<Payment[]>>("/payments", {
     method: "GET",
     query: params,
   });
 }
 
-export function refundPayment(
-  id: string,
-  payload?: {
-    reason?: string;
-  },
-) {
-  return apiClient(`/payments/${id}/refund`, {
+export function refundPayment(id: string, payload?: { reason?: string }) {
+  return apiClient<ApiResponse<Payment>>(`/payments/${id}/refund`, {
     method: "PATCH",
     body: payload,
   });

@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   addRequestAttachments,
   cancelRequest,
@@ -11,23 +16,43 @@ import {
   updateRequestStatus,
 } from "@/api";
 
-export function useCreateServiceRequest() {
+/** One place that knows which caches a request mutation makes stale. */
+function useInvalidateRequests() {
   const queryClient = useQueryClient();
 
+  return (id?: string) => {
+    queryClient.invalidateQueries({ queryKey: ["requests"] });
+    queryClient.invalidateQueries({ queryKey: ["request-search"] });
+    queryClient.invalidateQueries({ queryKey: ["payments"] });
+    queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    if (id) queryClient.invalidateQueries({ queryKey: ["request", id] });
+  };
+}
+
+export function useCreateServiceRequest() {
+  const invalidate = useInvalidateRequests();
+
   return useMutation({
-    mutationFn: createServiceRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["requests"],
-      });
-    },
+    mutationFn: ({
+      formData,
+      onProgress,
+    }: {
+      formData: FormData;
+      onProgress?: (percent: number) => void;
+    }) => createServiceRequest(formData, onProgress),
+    onSuccess: () => invalidate(),
   });
 }
 
-export function useRequests(params?: Parameters<typeof getRequests>[0]) {
+export function useRequests(
+  params?: Parameters<typeof getRequests>[0],
+  enabled = true,
+) {
   return useQuery({
     queryKey: ["requests", params],
     queryFn: () => getRequests(params),
+    enabled,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -46,27 +71,21 @@ export function useSearchRequests(
     queryKey: ["request-search", params],
     queryFn: () => searchRequests(params),
     enabled: !!params.q,
+    placeholderData: keepPreviousData,
   });
 }
 
 export function useCancelRequest() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateRequests();
 
   return useMutation({
     mutationFn: cancelRequest,
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({
-        queryKey: ["requests"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["request", id],
-      });
-    },
+    onSuccess: (_, id) => invalidate(id),
   });
 }
 
 export function useUpdateRequestStatus() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateRequests();
 
   return useMutation({
     mutationFn: ({
@@ -76,19 +95,12 @@ export function useUpdateRequestStatus() {
       id: string;
       payload: Parameters<typeof updateRequestStatus>[1];
     }) => updateRequestStatus(id, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["requests"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["request", variables.id],
-      });
-    },
+    onSuccess: (_, variables) => invalidate(variables.id),
   });
 }
 
 export function useReassignRequest() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateRequests();
 
   return useMutation({
     mutationFn: ({
@@ -98,19 +110,12 @@ export function useReassignRequest() {
       id: string;
       payload: Parameters<typeof reassignRequest>[1];
     }) => reassignRequest(id, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["requests"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["request", variables.id],
-      });
-    },
+    onSuccess: (_, variables) => invalidate(variables.id),
   });
 }
 
 export function useReopenRequest() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateRequests();
 
   return useMutation({
     mutationFn: ({
@@ -120,27 +125,23 @@ export function useReopenRequest() {
       id: string;
       payload: Parameters<typeof reopenRequest>[1];
     }) => reopenRequest(id, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["requests"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["request", variables.id],
-      });
-    },
+    onSuccess: (_, variables) => invalidate(variables.id),
   });
 }
 
 export function useAddRequestAttachments() {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateRequests();
 
   return useMutation({
-    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
-      addRequestAttachments(id, formData),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["request", variables.id],
-      });
-    },
+    mutationFn: ({
+      id,
+      formData,
+      onProgress,
+    }: {
+      id: string;
+      formData: FormData;
+      onProgress?: (percent: number) => void;
+    }) => addRequestAttachments(id, formData, onProgress),
+    onSuccess: (_, variables) => invalidate(variables.id),
   });
 }

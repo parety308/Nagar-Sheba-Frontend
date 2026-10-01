@@ -1,11 +1,13 @@
 import apiClient from "@/lib/apiClient";
+import type { ApiResponse } from "@/types/api.type";
+import type { Feedback } from "@/types/feedback.type";
 
 export function createFeedback(payload: {
   requestId: string;
   rating: number;
   comment?: string;
 }) {
-  return apiClient("/feedbacks", {
+  return apiClient<ApiResponse<Feedback>>("/feedbacks", {
     method: "POST",
     body: payload,
   });
@@ -17,14 +19,14 @@ export function getFeedbacks(params?: {
   rating?: number;
   departmentId?: string;
 }) {
-  return apiClient("/feedbacks", {
+  return apiClient<ApiResponse<Feedback[]>>("/feedbacks", {
     method: "GET",
     query: params,
   });
 }
 
 export function getFeedback(requestId: string) {
-  return apiClient(`/feedbacks/${requestId}`, {
+  return apiClient<ApiResponse<Feedback>>(`/feedbacks/${requestId}`, {
     method: "GET",
   });
 }

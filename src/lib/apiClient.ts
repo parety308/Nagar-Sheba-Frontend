@@ -21,7 +21,7 @@ const NO_REFRESH = [
 // Single-flight: parallel 401s share one refresh call
 let refreshPromise: Promise<boolean> | null = null;
 
-function refreshSession() {
+export function refreshSession() {
   if (!refreshPromise) {
     refreshPromise = base("/auth/refresh-token", { method: "POST", body: {} })
       .then(() => true)
