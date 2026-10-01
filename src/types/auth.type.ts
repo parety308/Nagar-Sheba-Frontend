@@ -31,3 +31,8 @@ export type UserRole = "CITIZEN" | "STAFF" | "ADMIN";
 export type AccountStatus = "ACTIVE" | "BLOCKED";
 
 export type AuthProvider = "CREDENTIAL" | "GOOGLE";
+
+export type ChangePasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+};

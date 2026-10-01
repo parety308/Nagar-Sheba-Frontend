@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  changePassword,
   forgotPassword,
   googleLogin,
   refreshToken,
   resetPassword,
   updateProfile,
+  updateProfileImage,
   userLogin,
   userLogOut,
   userProfile,
@@ -102,5 +104,28 @@ export function useProfile() {
     queryFn: async (): Promise<AuthUser | null> => (await userProfile()).data,
     retry: false,
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useChangePassword() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: changePassword,
+    onSuccess: () => {
+      // clears the "temporary password" banner
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+    },
+  });
+}
+
+export function useUpdateProfileImage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateProfileImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+    },
   });
 }

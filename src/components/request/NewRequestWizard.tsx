@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { UploadProgress } from "@/components/shared/UploadProgress";
@@ -71,10 +71,22 @@ export default function NewRequestWizard({
   const preselected = categories.find((c) => c.id === initialCategoryId)?.id;
 
   const [step, setStep] = useState(preselected ? 1 : 0);
-  const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
   const { mutate: create, isPending } = useCreateServiceRequest();
 
+  const [files, setFiles] = useState<File[]>([]);
+
+  const reviewPreviews = useMemo(
+    () => files.map((file) => ({ file, url: URL.createObjectURL(file) })),
+    [files],
+  );
+
+  useEffect(
+    () => () => {
+      for (const p of reviewPreviews) URL.revokeObjectURL(p.url);
+    },
+    [reviewPreviews],
+  );
   const groupedCategories = useMemo(() => {
     const groups = new Map<string, Category[]>();
     for (const c of categories) {
@@ -557,16 +569,16 @@ export default function NewRequestWizard({
                     ))}
                   </dl>
 
-                  {files.length > 0 && (
+                  {reviewPreviews.length > 0 && (
                     <div className="grid grid-cols-5 gap-2">
-                      {files.map((file, index) => (
+                      {reviewPreviews.map((p, index) => (
                         <div
-                          key={`${file.name}-${file.lastModified}-${index}`}
+                          key={`${p.file.name}-${p.file.lastModified}-${index}`}
                           className="relative aspect-square overflow-hidden rounded-md border bg-muted"
                         >
                           <Image
-                            src={URL.createObjectURL(file)}
-                            alt={file.name}
+                            src={p.url}
+                            alt={p.file.name}
                             fill
                             unoptimized
                             sizes="96px"

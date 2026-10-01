@@ -1,6 +1,7 @@
 import apiClient from "@/lib/apiClient";
 import type { ApiResponse } from "@/types/api.type";
 import type {
+  ChangePasswordPayload,
   ForgotPasswordPayload,
   LoginPayload,
   RegisterPayload,
@@ -78,4 +79,11 @@ export function refreshToken(refreshToken?: string) {
 
 export function userLogOut() {
   return apiClient<ApiResponse<null>>("/auth/logout", { method: "POST" });
+}
+
+export function changePassword(payload: ChangePasswordPayload) {
+  return apiClient<ApiResponse<null>>("/auth/change-password", {
+    method: "POST",
+    body: payload,
+  });
 }

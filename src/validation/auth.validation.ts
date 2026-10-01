@@ -44,3 +44,32 @@ export const ResetPasswordZodSchema = z.object({
     .regex(/^\d+$/, "OTP must contain only numbers."),
   newPassword: passwordSchema,
 });
+
+export const UpdateProfileZodSchema = z.object({
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Full name must be at least 2 characters."),
+  phone: z
+    .string()
+    .trim()
+    .refine(
+      (v) => v === "" || v.length >= 10,
+      "Phone number must be at least 10 characters.",
+    ),
+  address: z
+    .string()
+    .trim()
+    .max(255, "Address must not exceed 255 characters."),
+  title: z.string().trim().max(100, "Title must not exceed 100 characters."),
+});
+
+export const ChangePasswordZodSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required."),
+    newPassword: passwordSchema,
+  })
+  .refine((d) => d.currentPassword !== d.newPassword, {
+    message: "New password must be different from the current one.",
+    path: ["newPassword"],
+  });
