@@ -29,6 +29,7 @@ export const STATUS_META: Record<string, StatusMeta> = {
   // Account
   ACTIVE: { label: "Active", className: green },
   BLOCKED: { label: "Blocked", className: red },
+  DELETED: { label: "Deleted", className: red },
 };
 
 export const REQUEST_STATUSES = [

@@ -43,10 +43,7 @@ const PROVIDER_LABEL: Record<string, string> = {
 
 type Props = { requestBasePath: string; canRefund?: boolean };
 
-export function PaymentList({
-  requestBasePath,
-  canRefund = false,
-}: Props) {
+export function PaymentList({ requestBasePath, canRefund = false }: Props) {
   const { get, getNumber, setParams } = useUrlState();
   const page = getNumber("page", 1);
   const status = get("status", "all");

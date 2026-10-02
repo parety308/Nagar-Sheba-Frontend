@@ -12,8 +12,8 @@ import { formatCurrency, formatDateTime } from "@/lib/format";
 import type { UserRole } from "@/types/auth.type";
 import { AdminActions } from "./AdminActions";
 import { AttachmentGallery } from "./AttachmentGallery";
-// import { CitizenActions } from "./CitizenActions";
-// import { FeedbackCard } from "./FeedbackCard";
+import { CitizenActions } from "./CitizenActions";
+import { FeedbackCard } from "./FeedbackCard";
 import { LocationPreview } from "./LocationPreview";
 import { RequestTimeline } from "./RequestTimeline";
 import { StaffActions } from "./StaffActions";
@@ -50,6 +50,7 @@ export function RequestDetail({ id, userRole, backHref }: Props) {
   const proof = attachments.filter((a) => a.type === "RESOLUTION_PROOF");
   const lat = Number(r.latitude);
   const lng = Number(r.longitude);
+  const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
   const staff = r.assignedStaff;
 
   return (
@@ -90,7 +91,7 @@ export function RequestDetail({ id, userRole, backHref }: Props) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-medium">{r.address}</p>
-                  {Number.isFinite(lat) && Number.isFinite(lng) && (
+                  {hasCoords && (
                     <a
                       href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`}
                       target="_blank"
@@ -101,7 +102,7 @@ export function RequestDetail({ id, userRole, backHref }: Props) {
                     </a>
                   )}
                 </div>
-                {Number.isFinite(lat) && Number.isFinite(lng) && (
+                {hasCoords && (
                   <LocationPreview latitude={lat} longitude={lng} />
                 )}
               </div>
@@ -151,14 +152,20 @@ export function RequestDetail({ id, userRole, backHref }: Props) {
                     ? (staff.staffProfile?.fullName ?? staff.email)
                     : "Not yet assigned"}
                 </DetailRow>
+                {userRole !== "CITIZEN" && r.citizen && (
+                  <DetailRow label="Citizen">
+                    {r.citizen.citizenProfile?.fullName ?? r.citizen.email}
+                  </DetailRow>
+                )}
               </dl>
             </CardContent>
           </Card>
 
-          {userRole !== "CITIZEN" && r.citizen && (
-            <DetailRow label="Citizen">
-              {r.citizen.citizenProfile?.fullName ?? r.citizen.email}
-            </DetailRow>
+          {userRole === "CITIZEN" && (
+            <>
+              <CitizenActions request={r} />
+              <FeedbackCard request={r} />
+            </>
           )}
           {userRole === "STAFF" && <StaffActions request={r} />}
           {userRole === "ADMIN" && <AdminActions request={r} />}

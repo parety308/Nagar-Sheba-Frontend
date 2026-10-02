@@ -1,9 +1,12 @@
 "use client";
+
 import { Menu, ShieldCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useLogOut, useProfile } from "@/hook";
 import { getRoleHome } from "@/lib/roles";
@@ -16,6 +19,7 @@ const navItems = [
   { name: "FAQ", href: "/faq" },
   { name: "Contact", href: "/contact" },
 ];
+
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -94,6 +98,8 @@ export default function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
+
           {profileLoading ? (
             <div className="h-9 w-24 animate-pulse rounded-lg bg-muted" />
           ) : isLoggedIn ? (
@@ -137,20 +143,24 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen((open) => !open)}
-          className="flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:hidden"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-        >
-          {mobileMenuOpen ? (
-            <X className="size-5" />
-          ) : (
-            <Menu className="size-5" />
-          )}
-        </button>
+        {/* Mobile Actions */}
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation */}

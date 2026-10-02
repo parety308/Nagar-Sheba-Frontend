@@ -92,7 +92,9 @@ export function AuditLogList() {
                     </TableCell>
                     <TableCell>{log.actor.email}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary">{toEnumLabel(log.action)}</Badge>
+                      <Badge variant="secondary">
+                        {toEnumLabel(log.action)}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       {log.entityType}
@@ -108,7 +110,10 @@ export function AuditLogList() {
                           </summary>
                           <pre className="mt-2 max-w-72 overflow-x-auto rounded-md bg-muted p-2 text-[11px] whitespace-pre-wrap">
                             {JSON.stringify(
-                              { before: log.previousValue, after: log.newValue },
+                              {
+                                before: log.previousValue,
+                                after: log.newValue,
+                              },
                               null,
                               2,
                             )}

@@ -218,24 +218,12 @@ export default function LoginForm() {
           }}
         </form.Field>
 
-        <div className="flex items-center justify-between gap-4">
-          <label className="flex cursor-pointer select-none items-center gap-2">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="size-4 cursor-pointer accent-primary"
-            />
-            <span className="text-xs text-muted-foreground">
-              Remember on this device
-            </span>
-          </label>
-
-          <span className="flex items-center gap-1 text-xs text-secondary">
+        <div className="flex items-center justify-end">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <KeyRound className="size-3.5" />
             Secure Login
           </span>
         </div>
-
         <Button
           disabled={loginPending}
           type="submit"

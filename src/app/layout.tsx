@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Public_Sans } from "next/font/google";
-import { Toaster } from "sonner";
 import "./globals.css";
+import { AppToaster } from "@/components/shared/AppToaster";
 import { cn } from "@/lib/utils";
 import QueryProvider from "@/providers/query.provider";
+import { ThemeProvider } from "@/providers/theme.provider";
 
 const publicSansHeading = Public_Sans({
   subsets: ["latin"],
@@ -34,6 +35,9 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("ns-theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(t==="dark"){document.documentElement.classList.add("dark")}}catch(e){}})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,6 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
@@ -52,11 +57,18 @@ export default function RootLayout({
         "font-sans",
       )}
     >
+      <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Required for pre-hydration theme initialization */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
+
       <body className="flex min-h-full flex-col">
-        <QueryProvider>
-          <div className="flex-1">{children}</div>
-          <Toaster position="top-right" richColors />
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <div className="flex-1">{children}</div>
+            <AppToaster />
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

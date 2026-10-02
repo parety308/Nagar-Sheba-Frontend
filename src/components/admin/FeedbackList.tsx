@@ -73,7 +73,9 @@ export function FeedbackList({ requestBasePath }: { requestBasePath: string }) {
       ) : items.length === 0 ? (
         <EmptyState
           icon={hasFilters ? SearchX : MessageSquareText}
-          title={hasFilters ? "No feedback matches your filters" : "No feedback yet"}
+          title={
+            hasFilters ? "No feedback matches your filters" : "No feedback yet"
+          }
           description="Citizen ratings appear here once requests are resolved."
         />
       ) : (

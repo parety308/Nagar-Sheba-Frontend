@@ -33,7 +33,10 @@ export function RefundDialog({ payment }: { payment: Payment }) {
       // Always send an object: the API validates the body and Express 5
       // leaves req.body undefined when nothing is sent.
       refund(
-        { id: payment.id, payload: { reason: value.reason.trim() || undefined } },
+        {
+          id: payment.id,
+          payload: { reason: value.reason.trim() || undefined },
+        },
         {
           onSuccess: () => {
             toast.success("Payment refunded");
@@ -76,7 +79,9 @@ export function RefundDialog({ payment }: { payment: Payment }) {
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid} className="space-y-1.5">
-                  <FieldLabel htmlFor={field.name}>Reason (optional)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Reason (optional)
+                  </FieldLabel>
                   <Textarea
                     id={field.name}
                     rows={3}

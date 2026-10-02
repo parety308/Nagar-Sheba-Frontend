@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+import { SITE } from "@/config/site";
 
 const footerLinks = {
   platform: [
@@ -50,64 +51,38 @@ export default function Footer() {
               with your community.
             </p>
 
-            {/* Contact */}
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="size-4 shrink-0 text-primary" />
-                <span>Dhaka, Bangladesh</span>
+                <span>{SITE.address}</span>
               </div>
-
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Mail className="size-4 shrink-0 text-primary" />
                 <a
-                  href="mailto:support@nagarsheba.com"
+                  href={`mailto:${SITE.email}`}
                   className="transition-colors hover:text-foreground"
                 >
-                  support@nagarsheba.com
+                  {SITE.email}
                 </a>
               </div>
-
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="size-4 shrink-0 text-primary" />
                 <a
-                  href="tel:+8801700000000"
+                  href={SITE.phoneHref}
                   className="transition-colors hover:text-foreground"
                 >
-                  +880 1700-000000
+                  {SITE.phone}
                 </a>
               </div>
             </div>
 
-            {/* Social */}
-            <div className="mt-6 flex items-center gap-2">
+            <div className="mt-6">
               <a
-                href="/"
-                aria-label="Facebook"
-                className="flex size-9 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                <FaFacebook />
-              </a>
-
-              <a
-                href="/"
-                aria-label="Instagram"
-                className="flex size-9 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                <FaInstagram className="size-4" />
-              </a>
-
-              <a
-                href="/"
-                aria-label="Twitter"
-                className="flex size-9 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                <FaTwitter className="size-4" />
-              </a>
-
-              <a
-                href="/"
-                aria-label="GitHub"
-                className="flex size-9 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                href={SITE.github}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Source code on GitHub"
+                className="inline-flex size-9 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <FaGithub className="size-4" />
               </a>
