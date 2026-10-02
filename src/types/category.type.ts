@@ -9,6 +9,7 @@ export type Category = {
   isActive: boolean;
   departmentId: string;
   createdAt: string;
+  deletedAt?: string | null;
   department?: { id: string; name: string };
 };
 

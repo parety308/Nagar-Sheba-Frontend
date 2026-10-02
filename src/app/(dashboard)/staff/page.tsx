@@ -1,7 +1,8 @@
-export default function StaffDashboard() {
-  return (
-    <div>
-      <h1>This is StaffDashboard Page</h1>
-    </div>
-  );
+import type { Metadata } from "next";
+import { StaffOverview } from "@/components/dashboard/StaffOverview";
+
+export const metadata: Metadata = { title: "Overview" };
+
+export default function StaffDashboardPage() {
+  return <StaffOverview />;
 }

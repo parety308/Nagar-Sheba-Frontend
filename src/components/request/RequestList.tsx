@@ -22,6 +22,7 @@ import { useRequests, useSearchRequests, useUrlState } from "@/hook";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { REQUEST_STATUSES, STATUS_META } from "@/lib/status";
 import { cn } from "@/lib/utils";
+import { DepartmentFilter } from "./DepartmentFilter";
 import { RequestListSkeleton } from "./skeletons";
 
 const STATUS_OPTIONS = [
@@ -37,24 +38,62 @@ const SORT_OPTIONS = [
   { value: "title:asc", label: "Title A-Z" },
 ];
 
+const STAFF_ASSIGNED_OPTIONS = [
+  { value: "all", label: "Whole department" },
+  { value: "me", label: "Assigned to me" },
+  { value: "unassigned", label: "Unassigned" },
+];
+
+const ADMIN_ASSIGNED_OPTIONS = [
+  { value: "all", label: "Any" },
+  { value: "unassigned", label: "Unassigned" },
+];
+
+const OVERDUE_OPTIONS = [
+  { value: "all", label: "Any deadline" },
+  { value: "true", label: "Overdue only" },
+];
+
 type SortBy = "createdAt" | "updatedAt" | "title" | "status" | "slaDueAt";
 
-type Props = { basePath: string; canCreate?: boolean };
+type Props = {
+  basePath: string;
+  canCreate?: boolean;
+  showAssignedFilter?: boolean; // staff
+  adminFilters?: boolean; // admin: department + overdue + unassigned
+};
 
-export function RequestList({ basePath, canCreate = false }: Props) {
+export function RequestList({
+  basePath,
+  canCreate = false,
+  showAssignedFilter = false,
+  adminFilters = false,
+}: Props) {
   const { get, getNumber, setParams } = useUrlState();
 
   const page = getNumber("page", 1);
   const status = get("status", "all");
   const search = get("search").trim();
   const sort = get("sort", "createdAt:desc");
+  const assigned = get("assigned", "all");
+  const department = get("department", "all");
+  const overdue = get("overdue", "all");
   const [sortBy, sortOrder] = sort.split(":") as [SortBy, "asc" | "desc"];
+
+  const useAssigned = showAssignedFilter || adminFilters;
 
   const list = useRequests(
     {
       page,
       limit: 10,
       status: status === "all" ? undefined : status,
+      assigned:
+        useAssigned && assigned !== "all"
+          ? (assigned as "me" | "unassigned")
+          : undefined,
+      departmentId:
+        adminFilters && department !== "all" ? department : undefined,
+      overdue: adminFilters && overdue === "true" ? true : undefined,
       sortBy,
       sortOrder,
     },
@@ -65,15 +104,41 @@ export function RequestList({ basePath, canCreate = false }: Props) {
   // The search endpoint only takes q/page/limit, so it replaces the filtered list.
   const active = search ? searchResults : list;
   const requests = active.data?.data ?? [];
-  const hasFilters = status !== "all" || !!search || sort !== "createdAt:desc";
+  const hasFilters =
+    status !== "all" ||
+    !!search ||
+    sort !== "createdAt:desc" ||
+    (useAssigned && assigned !== "all") ||
+    (adminFilters && (department !== "all" || overdue !== "all"));
 
   return (
     <div>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
         <SearchInput
           placeholder="Search title or reference..."
           paramKey="search"
         />
+        {useAssigned && (
+          <FilterSelect
+            label="Assignment"
+            value={assigned}
+            options={
+              adminFilters ? ADMIN_ASSIGNED_OPTIONS : STAFF_ASSIGNED_OPTIONS
+            }
+            disabled={!!search}
+            onChange={(value) => setParams({ assigned: value })}
+          />
+        )}
+        {adminFilters && <DepartmentFilter disabled={!!search} />}
+        {adminFilters && (
+          <FilterSelect
+            label="Deadline"
+            value={overdue}
+            options={OVERDUE_OPTIONS}
+            disabled={!!search}
+            onChange={(value) => setParams({ overdue: value })}
+          />
+        )}
         <FilterSelect
           label="Status"
           value={status}
@@ -93,7 +158,14 @@ export function RequestList({ basePath, canCreate = false }: Props) {
             variant="ghost"
             className="h-9"
             onClick={() =>
-              setParams({ status: null, search: null, sort: null })
+              setParams({
+                status: null,
+                search: null,
+                sort: null,
+                assigned: null,
+                department: null,
+                overdue: null,
+              })
             }
           >
             Clear
@@ -117,13 +189,13 @@ export function RequestList({ basePath, canCreate = false }: Props) {
           <EmptyState
             icon={SearchX}
             title="No requests match your filters"
-            description="Try a different status or search term."
+            description="Try different filters or a different search term."
           />
         ) : (
           <EmptyState
             icon={ClipboardList}
             title="No requests yet"
-            description="When you report an issue or apply for a permit, it will appear here."
+            description="Requests will appear here once they are filed."
             action={
               canCreate ? (
                 <Link
@@ -145,6 +217,7 @@ export function RequestList({ basePath, canCreate = false }: Props) {
                   <TableHead className="px-4">Reference</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Service</TableHead>
+                  {adminFilters && <TableHead>Department</TableHead>}
                   <TableHead>Status</TableHead>
                   <TableHead>Fee</TableHead>
                   <TableHead className="pr-4">Filed</TableHead>
@@ -165,6 +238,9 @@ export function RequestList({ basePath, canCreate = false }: Props) {
                       {r.title}
                     </TableCell>
                     <TableCell>{r.category?.name ?? "—"}</TableCell>
+                    {adminFilters && (
+                      <TableCell>{r.department?.name ?? "—"}</TableCell>
+                    )}
                     <TableCell>
                       <div className="flex items-center gap-1.5">
                         <StatusBadge status={r.status} />

@@ -11,11 +11,13 @@ import { useRequest } from "@/hook";
 import { formatCurrency, formatDateTime } from "@/lib/format";
 import type { UserRole } from "@/types/auth.type";
 import { AttachmentGallery } from "./AttachmentGallery";
-import { CitizenActions } from "./CitizenActions";
-import { FeedbackCard } from "./FeedbackCard";
+// import { CitizenActions } from "./CitizenActions";
+// import { FeedbackCard } from "./FeedbackCard";
 import { LocationPreview } from "./LocationPreview";
 import { RequestTimeline } from "./RequestTimeline";
+import { StaffActions } from "./StaffActions";
 import { RequestDetailSkeleton } from "./skeletons";
+import { AdminActions } from "./AdminActions";
 
 type Props = { id: string; userRole: UserRole; backHref: string };
 
@@ -153,13 +155,13 @@ export function RequestDetail({ id, userRole, backHref }: Props) {
             </CardContent>
           </Card>
 
-          {userRole === "CITIZEN" && (
-            <>
-              <CitizenActions request={r} />
-              <FeedbackCard request={r} />
-            </>
+          {userRole !== "CITIZEN" && r.citizen && (
+            <DetailRow label="Citizen">
+              {r.citizen.citizenProfile?.fullName ?? r.citizen.email}
+            </DetailRow>
           )}
-          {/* Staff (Part 6) and Admin (Part 7) action panels plug in here */}
+          {userRole === "STAFF" && <StaffActions request={r} />}
+          {userRole === "ADMIN" && <AdminActions request={r} />}
         </div>
       </div>
     </div>

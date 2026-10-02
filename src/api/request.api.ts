@@ -36,6 +36,7 @@ export function getRequests(params?: {
   departmentId?: string;
   categoryId?: string;
   overdue?: boolean;
+  assigned?: "me" | "unassigned";
   sortBy?: "createdAt" | "updatedAt" | "title" | "status" | "slaDueAt";
   sortOrder?: "asc" | "desc";
 }) {

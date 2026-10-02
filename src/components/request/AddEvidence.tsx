@@ -9,18 +9,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useAddRequestAttachments } from "@/hook";
 import { getApiErrorMessage } from "@/lib/api-error";
+import type { AttachmentType } from "@/types";
 import { PhotoPicker } from "./PhotoPicker";
 
-type Props = { requestId: string; remaining: number };
+type Props = {
+  requestId: string;
+  remaining: number;
+  type?: AttachmentType;
+  title?: string;
+};
 
-export function AddEvidence({ requestId, remaining }: Props) {
+export function AddEvidence({
+  requestId,
+  remaining,
+  type = "EVIDENCE",
+  title = "Add more evidence",
+}: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
   const { mutate: upload, isPending } = useAddRequestAttachments();
 
   const submit = () => {
     const formData = new FormData();
-    formData.append("type", "EVIDENCE");
+    formData.append("type", type);
     for (const file of files) formData.append("attachments", file);
 
     setProgress(0);
@@ -42,7 +53,7 @@ export function AddEvidence({ requestId, remaining }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add more evidence</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <PhotoPicker

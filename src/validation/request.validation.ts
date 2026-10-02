@@ -48,3 +48,11 @@ export const FeedbackZodSchema = z.object({
     .max(5, "Rating must not exceed 5."),
   comment: z.string().max(1000, "Comment must not exceed 1000 characters."),
 });
+
+export const ResolveRequestZodSchema = z.object({
+  note: z
+    .string()
+    .trim()
+    .min(5, "Resolution note must be at least 5 characters.")
+    .max(1000, "Note must not exceed 1000 characters."),
+});

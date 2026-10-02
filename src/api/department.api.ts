@@ -1,6 +1,8 @@
 import apiClient from "@/lib/apiClient";
+import type { ApiResponse } from "@/types/api.type";
 import type {
   CreateDepartmentPayload,
+  Department,
   UpdateDepartmentPayload,
 } from "@/types/department.type";
 
@@ -9,34 +11,34 @@ export function getDepartments(params?: {
   limit?: number;
   includeInactive?: boolean;
 }) {
-  return apiClient("/departments", {
+  return apiClient<ApiResponse<Department[]>>("/departments", {
     method: "GET",
     query: params,
   });
 }
 
 export function getDepartment(id: string) {
-  return apiClient(`/departments/${id}`, {
+  return apiClient<ApiResponse<Department>>(`/departments/${id}`, {
     method: "GET",
   });
 }
 
 export function createDepartment(payload: CreateDepartmentPayload) {
-  return apiClient("/departments", {
+  return apiClient<ApiResponse<Department>>("/departments", {
     method: "POST",
     body: payload,
   });
 }
 
 export function updateDepartment(id: string, payload: UpdateDepartmentPayload) {
-  return apiClient(`/departments/${id}`, {
+  return apiClient<ApiResponse<Department>>(`/departments/${id}`, {
     method: "PATCH",
     body: payload,
   });
 }
 
 export function deleteDepartment(id: string) {
-  return apiClient(`/departments/${id}`, {
+  return apiClient<ApiResponse<Department>>(`/departments/${id}`, {
     method: "DELETE",
   });
 }
