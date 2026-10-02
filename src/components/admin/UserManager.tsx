@@ -120,7 +120,9 @@ export function UserManager() {
           <Button
             variant="ghost"
             className="h-9"
-            onClick={() => setParams({ role: null, status: null, search: null })}
+            onClick={() =>
+              setParams({ role: null, status: null, search: null })
+            }
           >
             Clear
           </Button>

@@ -17,11 +17,7 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  useCreateStaff,
-  useDepartments,
-  useUpdateUserRole,
-} from "@/hook";
+import { useCreateStaff, useDepartments, useUpdateUserRole } from "@/hook";
 import { getApiErrorMessage } from "@/lib/api-error";
 import type { AdminUser } from "@/types/admin.type";
 import { ChangeRoleZodSchema, ProvisionStaffZodSchema } from "@/validation";
@@ -35,8 +31,16 @@ const ROLE_OPTIONS = [
 
 const TEXT_FIELDS = [
   { name: "fullName", label: "Full name", type: "text" },
-  { name: "personalEmail", label: "Personal email (receives the password)", type: "email" },
-  { name: "organizationEmail", label: "Organization email (login)", type: "email" },
+  {
+    name: "personalEmail",
+    label: "Personal email (receives the password)",
+    type: "email",
+  },
+  {
+    name: "organizationEmail",
+    label: "Organization email (login)",
+    type: "email",
+  },
 ] as const;
 
 function useDepartmentOptions() {

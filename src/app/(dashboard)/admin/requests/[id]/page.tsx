@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Request details" };
 
 type Props = { params: Promise<{ id: string }> };
 
-export default async function StaffRequestDetailPage({ params }: Props) {
+export default async function AdminRequestDetailPage({ params }: Props) {
   const { id } = await params;
-  return <RequestDetail id={id} userRole="STAFF" backHref="/staff/requests" />;
+  return <RequestDetail id={id} userRole="ADMIN" backHref="/admin/requests" />;
 }

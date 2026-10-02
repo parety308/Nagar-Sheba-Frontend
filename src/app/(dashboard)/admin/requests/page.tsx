@@ -4,17 +4,17 @@ import { RequestList } from "@/components/request/RequestList";
 import { RequestListSkeleton } from "@/components/request/skeletons";
 import { PageHeader } from "@/components/shared/PageHeader";
 
-export const metadata: Metadata = { title: "Request queue" };
+export const metadata: Metadata = { title: "Requests" };
 
-export default function StaffRequestsPage() {
+export default function AdminRequestsPage() {
   return (
     <>
       <PageHeader
-        title="Request queue"
-        description="Requests for your department. Only requests assigned to you can be updated."
+        title="All requests"
+        description="Filter by department, deadline or assignment, then open a request to reassign or override it."
       />
       <Suspense fallback={<RequestListSkeleton />}>
-        <RequestList basePath="/staff/requests" showAssignedFilter />
+        <RequestList basePath="/admin/requests" adminFilters />
       </Suspense>
     </>
   );

@@ -4,11 +4,11 @@ import { useForm } from "@tanstack/react-form";
 import { Building2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { RequestListSkeleton } from "@/components/request/skeletons";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { Pagination } from "@/components/shared/Pagination";
-import { RequestListSkeleton } from "@/components/request/skeletons";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
@@ -225,7 +225,9 @@ export function DepartmentManager() {
                       {d.description ?? "—"}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={d.deletedAt ? "BLOCKED" : "ACTIVE"} />
+                      <StatusBadge
+                        status={d.deletedAt ? "BLOCKED" : "ACTIVE"}
+                      />
                     </TableCell>
                     <TableCell>{formatDate(d.createdAt)}</TableCell>
                     <TableCell className="pr-4 text-right">

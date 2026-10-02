@@ -4,6 +4,7 @@ import { useForm } from "@tanstack/react-form";
 import { Pencil, Plus, Power, Tags, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DepartmentFilter } from "@/components/request/DepartmentFilter";
 import { RequestListSkeleton } from "@/components/request/skeletons";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -30,7 +31,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DepartmentFilter } from "@/components/request/DepartmentFilter";
 import {
   useCategories,
   useCreateCategory,
@@ -265,7 +265,9 @@ export function CategoryManager() {
       { id: c.id, payload: { isActive: !c.isActive } },
       {
         onSuccess: () =>
-          toast.success(c.isActive ? "Category deactivated" : "Category activated"),
+          toast.success(
+            c.isActive ? "Category deactivated" : "Category activated",
+          ),
         onError: (err) =>
           toast.error("Could not update category", {
             description: getApiErrorMessage(err),
@@ -326,7 +328,9 @@ export function CategoryManager() {
                     <TableCell className="px-4 font-medium">{c.name}</TableCell>
                     <TableCell>{c.department?.name ?? "—"}</TableCell>
                     <TableCell>
-                      {c.feeType === "PAID" ? formatCurrency(c.feeAmount) : "Free"}
+                      {c.feeType === "PAID"
+                        ? formatCurrency(c.feeAmount)
+                        : "Free"}
                     </TableCell>
                     <TableCell>{formatSla(c.slaHours)}</TableCell>
                     <TableCell>

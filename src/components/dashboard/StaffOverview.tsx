@@ -19,9 +19,17 @@ export function StaffOverview() {
 
   // limit=1 queries: only meta.total is needed
   const toStart = useRequests({ limit: 1, assigned: "me", status: "ASSIGNED" });
-  const inProgress = useRequests({ limit: 1, assigned: "me", status: "IN_PROGRESS" });
+  const inProgress = useRequests({
+    limit: 1,
+    assigned: "me",
+    status: "IN_PROGRESS",
+  });
   const overdue = useRequests({ limit: 1, assigned: "me", overdue: true });
-  const resolved = useRequests({ limit: 1, assigned: "me", status: "RESOLVED" });
+  const resolved = useRequests({
+    limit: 1,
+    assigned: "me",
+    status: "RESOLVED",
+  });
   const needsAction = useRequests({
     limit: 5,
     assigned: "me",
@@ -49,9 +57,23 @@ export function StaffOverview() {
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard title="Waiting to start" value={count(toStart)} icon={Play} />
-        <StatCard title="In progress" value={count(inProgress)} icon={Hourglass} />
-        <StatCard title="Overdue" value={count(overdue)} icon={AlarmClock} tone="danger" />
-        <StatCard title="Resolved" value={count(resolved)} icon={CircleCheck} tone="success" />
+        <StatCard
+          title="In progress"
+          value={count(inProgress)}
+          icon={Hourglass}
+        />
+        <StatCard
+          title="Overdue"
+          value={count(overdue)}
+          icon={AlarmClock}
+          tone="danger"
+        />
+        <StatCard
+          title="Resolved"
+          value={count(resolved)}
+          icon={CircleCheck}
+          tone="success"
+        />
       </div>
 
       <Card>
@@ -73,7 +95,10 @@ export function StaffOverview() {
               ))}
             </div>
           ) : needsAction.isError ? (
-            <ErrorState error={needsAction.error} onRetry={() => needsAction.refetch()} />
+            <ErrorState
+              error={needsAction.error}
+              onRetry={() => needsAction.refetch()}
+            />
           ) : (needsAction.data?.data ?? []).length === 0 ? (
             <EmptyState
               icon={Inbox}
@@ -95,7 +120,9 @@ export function StaffOverview() {
                       </p>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      {r.isOverdue && <Badge variant="destructive">Overdue</Badge>}
+                      {r.isOverdue && (
+                        <Badge variant="destructive">Overdue</Badge>
+                      )}
                       <StatusBadge status={r.status} />
                     </div>
                   </Link>

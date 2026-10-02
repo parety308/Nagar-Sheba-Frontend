@@ -3,10 +3,10 @@
 import { useForm } from "@tanstack/react-form";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
-import { FieldError, FieldLabel, Field } from "@/components/ui/field";
 import { SelectField } from "@/components/shared/SelectField";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -159,8 +159,7 @@ function StatusOverrideForm({ request }: { request: ServiceRequest }) {
   // Cancelling is a citizen flow (it triggers the refund), and PENDING_PAYMENT
   // can only be left through a verified payment, so neither is offered here.
   const options = REQUEST_STATUSES.filter(
-    (s) =>
-      s !== request.status && s !== "CANCELLED" && s !== "PENDING_PAYMENT",
+    (s) => s !== request.status && s !== "CANCELLED" && s !== "PENDING_PAYMENT",
   ).map((s) => ({ value: s, label: STATUS_META[s].label }));
 
   const form = useForm({

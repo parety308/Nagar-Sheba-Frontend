@@ -49,7 +49,10 @@ const fullName = z
   .trim()
   .min(2, "Full name must be at least 2 characters.")
   .max(100, "Full name must not exceed 100 characters.");
-const title = z.string().trim().max(100, "Title must not exceed 100 characters.");
+const title = z
+  .string()
+  .trim()
+  .max(100, "Title must not exceed 100 characters.");
 
 export const ProvisionStaffZodSchema = z
   .object({

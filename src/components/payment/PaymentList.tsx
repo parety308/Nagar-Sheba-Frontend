@@ -20,6 +20,7 @@ import {
 import { usePayments, useUrlState } from "@/hook";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { STATUS_META } from "@/lib/status";
+import { RefundDialog } from "./RefundDialog";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All statuses" },
@@ -40,9 +41,12 @@ const PROVIDER_LABEL: Record<string, string> = {
   BKASH: "bKash",
 };
 
-type Props = { requestBasePath: string };
+type Props = { requestBasePath: string; canRefund?: boolean };
 
-export function PaymentList({ requestBasePath }: Props) {
+export function PaymentList({
+  requestBasePath,
+  canRefund = false,
+}: Props) {
   const { get, getNumber, setParams } = useUrlState();
   const page = getNumber("page", 1);
   const status = get("status", "all");
@@ -113,7 +117,10 @@ export function PaymentList({ requestBasePath }: Props) {
                   <TableHead>Amount</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Paid</TableHead>
-                  <TableHead className="pr-4">Created</TableHead>
+                  <TableHead>Created</TableHead>
+                  {canRefund && (
+                    <TableHead className="pr-4 text-right">Actions</TableHead>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -142,9 +149,14 @@ export function PaymentList({ requestBasePath }: Props) {
                       <StatusBadge status={p.status} />
                     </TableCell>
                     <TableCell>{formatDate(p.paidAt)}</TableCell>
-                    <TableCell className="pr-4">
-                      {formatDate(p.createdAt)}
-                    </TableCell>
+                    <TableCell>{formatDate(p.createdAt)}</TableCell>
+                    {canRefund && (
+                      <TableCell className="pr-4 text-right">
+                        {p.status === "COMPLETED" && (
+                          <RefundDialog payment={p} />
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
