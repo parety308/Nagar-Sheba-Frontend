@@ -20,12 +20,11 @@ import {
 function useInvalidateRequests() {
   const queryClient = useQueryClient();
 
-  return (id?: string) => {
+  return (id?: string, opts: { payments?: boolean } = {}) => {
     queryClient.invalidateQueries({ queryKey: ["requests"] });
     queryClient.invalidateQueries({ queryKey: ["request-search"] });
-    queryClient.invalidateQueries({ queryKey: ["payments"] });
-    queryClient.invalidateQueries({ queryKey: ["notifications"] });
     if (id) queryClient.invalidateQueries({ queryKey: ["request", id] });
+    if (opts.payments) queryClient.invalidateQueries({ queryKey: ["payments"] });
   };
 }
 

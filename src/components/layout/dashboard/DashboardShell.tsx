@@ -15,6 +15,7 @@ import { getRoleHome } from "@/lib/roles";
 import type { UserRole } from "@/types/auth.type";
 import { SidebarContent } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { DashboardPageSkeleton } from "./DashboardPageSkeleton";
 
 type Props = { userRole: UserRole; children: ReactNode };
 
@@ -23,7 +24,7 @@ export function DashboardShell({ userRole, children }: Props) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: profile, isLoading } = useProfile();
-
+const ready = !isLoading && !!profile && profile.role === userRole;
   // Second line of defence behind proxy.ts (covers expired/cleared sessions)
   useEffect(() => {
     if (isLoading) return;
@@ -83,8 +84,8 @@ export function DashboardShell({ userRole, children }: Props) {
         )}
 
         <main className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
-          {children}
-        </main>
+  {ready ? children : <DashboardPageSkeleton />}
+</main>
       </div>
     </div>
   );

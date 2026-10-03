@@ -28,14 +28,9 @@ export function StatCard({
   tone = "default",
 }: Props) {
   return (
-    <Card className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:ring-primary/30">
+<Card className="transition-colors hover:ring-primary/30">
       <CardContent className="flex items-center gap-4">
-        <div
-          className={cn(
-            "flex size-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3",
-            tones[tone],
-          )}
-        >
+        <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", tones[tone])}>
           <Icon className="size-5" />
         </div>
         <div className="min-w-0">
