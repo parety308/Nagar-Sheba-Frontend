@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Public_Sans } from "next/font/google";
+import { Geist_Mono, Inter, Public_Sans } from "next/font/google";
 import "./globals.css";
 import { AppToaster } from "@/components/shared/AppToaster";
 import { cn } from "@/lib/utils";
+import { MotionProvider } from "@/providers/motion.provider";
 import QueryProvider from "@/providers/query.provider";
 import { ThemeProvider } from "@/providers/theme.provider";
 
@@ -16,17 +17,15 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: { default: "Nagar Sheba", template: "%s | Nagar Sheba" },
   description: "Smart City Services for Citizens",
   openGraph: {
@@ -50,7 +49,6 @@ export default function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        geistSans.variable,
         geistMono.variable,
         inter.variable,
         publicSansHeading.variable,
@@ -62,14 +60,22 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
 
-      <body className="flex min-h-full flex-col">
-        <ThemeProvider>
-          <QueryProvider>
-            <div className="flex-1">{children}</div>
-            <AppToaster />
-          </QueryProvider>
-        </ThemeProvider>
-      </body>
+<body className="flex min-h-full flex-col">
+  <a
+    href="#main"
+    className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:ring-2 focus:ring-ring"
+  >
+    Skip to content
+  </a>
+  <ThemeProvider>
+    <QueryProvider>
+      <MotionProvider>
+        <div className="flex-1">{children}</div>
+        <AppToaster />
+      </MotionProvider>
+    </QueryProvider>
+  </ThemeProvider>
+</body>
     </html>
   );
 }

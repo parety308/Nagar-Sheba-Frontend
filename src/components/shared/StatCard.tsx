@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { CountUp } from "@/components/motion/CountUp";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -28,18 +29,23 @@ export function StatCard({
   tone = "default",
 }: Props) {
   return (
-<Card className="transition-colors hover:ring-primary/30">
+    <Card className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-primary/30">
       <CardContent className="flex items-center gap-4">
-        <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", tones[tone])}>
+        <div
+          className={cn(
+            "flex size-11 shrink-0 items-center justify-center rounded-xl",
+            tones[tone],
+          )}
+        >
           <Icon className="size-5" />
         </div>
         <div className="min-w-0">
           <p className="truncate text-xs text-muted-foreground">{title}</p>
           <p className="text-2xl font-semibold tracking-tight tabular-nums">
-            {value}
+            {typeof value === "number" ? <CountUp value={value} /> : value}
           </p>
           {hint && (
-            <p className="truncate text-[11px] text-muted-foreground">{hint}</p>
+            <p className="truncate text-xs text-muted-foreground">{hint}</p>
           )}
         </div>
       </CardContent>

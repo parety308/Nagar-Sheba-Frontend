@@ -1,5 +1,8 @@
+
 import { Eye, HeartHandshake, ShieldCheck, Users, Wrench } from "lucide-react";
 import type { Metadata } from "next";
+import { Reveal } from "@/components/motion/Reveal";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
 export const metadata: Metadata = {
@@ -66,43 +69,50 @@ export default function AboutUsPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Our principles" title="What we stand for" />
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <Reveal>
+          <SectionHeading eyebrow="Our principles" title="What we stand for" />
+        </Reveal>
+
+        <Stagger className="mt-10 grid gap-6 md:grid-cols-3">
           {VALUES.map((v) => (
-            <div key={v.title} className="rounded-xl border bg-card p-6">
-              <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <v.icon className="size-5" />
+            <StaggerItem key={v.title}>
+              <div className="h-full rounded-xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <v.icon className="size-5" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold">{v.title}</h3>
+                <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                  {v.text}
+                </p>
               </div>
-              <h3 className="mt-4 text-base font-semibold">{v.title}</h3>
-              <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-                {v.text}
-              </p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </section>
 
       <section className="border-t bg-muted/40">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <SectionHeading
-            eyebrow="Who uses it"
-            title="Three roles, one workflow"
-            description="Each role sees only what it needs, and permissions are enforced on both the server and the interface."
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Who uses it"
+              title="Three roles, one workflow"
+              description="Each role sees only what it needs, and permissions are enforced on both the server and the interface."
+            />
+          </Reveal>
+
+          <Stagger className="mt-10 grid gap-6 md:grid-cols-3">
             {ROLES.map((r) => (
-              <div
-                key={r.title}
-                className="rounded-xl border bg-background p-6"
-              >
-                <r.icon className="size-6 text-primary" />
-                <h3 className="mt-3 text-base font-semibold">{r.title}</h3>
-                <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-                  {r.text}
-                </p>
-              </div>
+              <StaggerItem key={r.title}>
+                <div className="h-full rounded-xl border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                  <r.icon className="size-6 text-primary" />
+                  <h3 className="mt-3 text-base font-semibold">{r.title}</h3>
+                  <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                    {r.text}
+                  </p>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
     </>

@@ -19,7 +19,13 @@ type Props = Omit<
   hint?: string;
 };
 
-export function TextField({ field, label, hint, className, ...inputProps }: Props) {
+export function TextField({
+  field,
+  label,
+  hint,
+  className,
+  ...inputProps
+}: Props) {
   const invalid = field.state.meta.isTouched && !field.state.meta.isValid;
   const errorId = `${field.name}-error`;
   const hintId = `${field.name}-hint`;

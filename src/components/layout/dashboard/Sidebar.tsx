@@ -1,8 +1,10 @@
 "use client";
 
 import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useId } from "react";
 import { getActiveHref, NAV_ITEMS, ROLE_LABEL } from "@/config/navigation";
 import { getRoleHome } from "@/lib/roles";
 import { cn } from "@/lib/utils";
@@ -13,6 +15,7 @@ type Props = { role: UserRole; onNavigate?: () => void };
 export function SidebarContent({ role, onNavigate }: Props) {
   const pathname = usePathname();
   const router = useRouter();
+  const uid = useId();
   const items = NAV_ITEMS[role];
   const activeHref = getActiveHref(pathname, items);
 
@@ -49,12 +52,25 @@ export function SidebarContent({ role, onNavigate }: Props) {
               onClick={onNavigate}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                "relative isolate flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary/10 text-primary"
+                  ? "text-primary"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
+              {isActive && (
+                <motion.span
+                  layoutId={`nav-pill-${uid}`}
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 rounded-lg bg-primary/10"
+                  transition={{
+                    type: "spring",
+                    stiffness: 420,
+                    damping: 34,
+                  }}
+                />
+              )}
+
               <Icon className="size-4.5" />
               {item.label}
             </Link>
@@ -63,19 +79,19 @@ export function SidebarContent({ role, onNavigate }: Props) {
       </nav>
 
       <div className="shrink-0 border-t p-3">
-  <button
-    type="button"
-    onClick={() => {
-      onNavigate?.();
-      router.push("/");
-      router.refresh(); // drop the cached home page so it re-fetches fresh data
-    }}
-    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-  >
-    <ArrowLeft className="size-4.5" />
-    Back to website
-  </button>
-</div>
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate?.();
+            router.push("/");
+            router.refresh();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <ArrowLeft className="size-4.5" />
+          Back to website
+        </button>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,10 @@ export function useObjectUrls(files: File[]) {
   const [previews, setPreviews] = useState<{ file: File; url: string }[]>([]);
 
   useEffect(() => {
-    const next = files.map((file) => ({ file, url: URL.createObjectURL(file) }));
+    const next = files.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
     setPreviews(next);
     return () => {
       for (const p of next) URL.revokeObjectURL(p.url);

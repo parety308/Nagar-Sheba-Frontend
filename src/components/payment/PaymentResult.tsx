@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { AnimatedCheck } from "@/components/shared/AnimatedCheck";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePayments, useProfile } from "@/hook";
@@ -62,23 +63,42 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
     ? data?.data.find((p) => p.providerRef === ref)
     : undefined;
 
-  const { icon: Icon, tone, title, text } = COPY[outcome];
+  // The success redirect can arrive even if verification failed server-side,
+  // so trust the real payment status once it has loaded.
+  const effective: Outcome =
+    outcome === "success" && payment?.status === "FAILED" ? "fail" : outcome;
+  const confirming = outcome === "success" && payment?.status === "PENDING";
+
+  const { icon: Icon, tone, title, text } = COPY[effective];
 
   return (
     <div className="rounded-xl border bg-card p-8 text-center shadow-lg">
       <div
+        key={effective}
         className={cn(
-          "mx-auto mb-4 flex size-16 items-center justify-center rounded-full",
+          "mx-auto mb-4 flex size-16 animate-pop items-center justify-center rounded-full",
           tone,
         )}
       >
-        <Icon className="size-8" />
+        {effective === "success" ? (
+          <AnimatedCheck className="size-9" />
+        ) : (
+          <Icon className="size-8" />
+        )}
       </div>
-      <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{text}</p>
+
+      <h1 className="text-xl font-semibold tracking-tight">
+        {confirming ? "Confirming your payment" : title}
+      </h1>
+
+      <p className="mt-2 text-sm text-muted-foreground">
+        {confirming
+          ? "We're still waiting for the gateway to confirm. Check your request in a moment."
+          : text}
+      </p>
 
       {ref && (
-        <div className="mt-6 rounded-lg border bg-muted/40 p-4 text-left text-sm">
+        <div className="mt-6 animate-page-in rounded-lg border bg-muted/40 p-4 text-left text-sm">
           {isLoading ? (
             <Skeleton className="h-12 w-full" />
           ) : payment ? (
@@ -89,12 +109,14 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
                   {formatCurrency(payment.amount)}
                 </dd>
               </div>
+
               <div className="flex justify-between gap-4">
                 <dt className="text-muted-foreground">Status</dt>
                 <dd>
                   <StatusBadge status={payment.status} />
                 </dd>
               </div>
+
               <div className="flex justify-between gap-4">
                 <dt className="text-muted-foreground">Reference</dt>
                 <dd className="truncate font-mono text-xs">
@@ -119,6 +141,7 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
             View request
           </Link>
         )}
+
         <Link
           href={profile ? getRoleHome(profile.role) : "/"}
           className={cn(buttonVariants({ variant: "outline" }), "h-10 px-4")}

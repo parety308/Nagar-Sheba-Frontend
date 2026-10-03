@@ -24,7 +24,8 @@ function useInvalidateRequests() {
     queryClient.invalidateQueries({ queryKey: ["requests"] });
     queryClient.invalidateQueries({ queryKey: ["request-search"] });
     if (id) queryClient.invalidateQueries({ queryKey: ["request", id] });
-    if (opts.payments) queryClient.invalidateQueries({ queryKey: ["payments"] });
+    if (opts.payments)
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
   };
 }
 

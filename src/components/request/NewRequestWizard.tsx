@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { UploadProgress } from "@/components/shared/UploadProgress";
@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateServiceRequest } from "@/hook";
+import { useObjectUrls } from "@/hook/useObjectUrls";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { formatCurrency, formatSla } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -76,17 +77,8 @@ export default function NewRequestWizard({
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const reviewPreviews = useMemo(
-    () => files.map((file) => ({ file, url: URL.createObjectURL(file) })),
-    [files],
-  );
+  const reviewPreviews = useObjectUrls(files);
 
-  useEffect(
-    () => () => {
-      for (const p of reviewPreviews) URL.revokeObjectURL(p.url);
-    },
-    [reviewPreviews],
-  );
   const groupedCategories = useMemo(() => {
     const groups = new Map<string, Category[]>();
     for (const c of categories) {
@@ -229,7 +221,15 @@ export default function NewRequestWizard({
           );
         })}
       </ol>
-
+      <div
+        className="mb-4 h-1 overflow-hidden rounded-full bg-muted"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full bg-primary transition-[width] duration-300 ease-out"
+          style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+        />
+      </div>
       <form
         noValidate
         onSubmit={(event) => {
@@ -246,7 +246,9 @@ export default function NewRequestWizard({
         {/* All steps stay mounted (hidden) so values and validation persist */}
 
         {/* Step 1: service */}
-        <section className={cn("space-y-6", step !== 0 && "hidden")}>
+        <section
+          className={cn("space-y-6 animate-step-in", step !== 0 && "hidden")}
+        >
           <div>
             <h2 className="text-lg font-semibold">Choose a service</h2>
             <p className="text-sm text-muted-foreground">
@@ -311,7 +313,9 @@ export default function NewRequestWizard({
         </section>
 
         {/* Step 2: details and location */}
-        <section className={cn("space-y-5", step !== 1 && "hidden")}>
+        <section
+          className={cn("space-y-6 animate-step-in", step !== 1 && "hidden")}
+        >
           <div>
             <h2 className="text-lg font-semibold">Describe the problem</h2>
             <p className="text-sm text-muted-foreground">
@@ -513,7 +517,9 @@ export default function NewRequestWizard({
         </section>
 
         {/* Step 3: photos */}
-        <section className={cn("space-y-4", step !== 2 && "hidden")}>
+        <section
+          className={cn("space-y-4 animate-step-in", step !== 2 && "hidden")}
+        >
           <div>
             <h2 className="text-lg font-semibold">Add photos (optional)</h2>
             <p className="text-sm text-muted-foreground">
@@ -524,7 +530,9 @@ export default function NewRequestWizard({
         </section>
 
         {/* Step 4: review */}
-        <section className={cn("space-y-5", step !== 3 && "hidden")}>
+        <section
+          className={cn("space-y-5 animate-step-in", step !== 3 && "hidden")}
+        >
           <div>
             <h2 className="text-lg font-semibold">Review and submit</h2>
             <p className="text-sm text-muted-foreground">

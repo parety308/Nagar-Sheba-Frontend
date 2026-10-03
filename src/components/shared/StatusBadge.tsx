@@ -14,8 +14,13 @@ export function StatusBadge({
 
   return (
     <Badge
+      key={status}
       variant="outline"
-      className={cn("border-transparent px-2.5", meta?.className, className)}
+      className={cn(
+        "animate-pop border-transparent px-2.5",
+        meta?.className,
+        className,
+      )}
     >
       {meta?.label ?? toEnumLabel(status)}
     </Badge>

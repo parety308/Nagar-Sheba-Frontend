@@ -2,8 +2,9 @@
 
 import { ImagePlus, X } from "lucide-react";
 import Image from "next/image";
-import { type ChangeEvent, useEffect, useMemo } from "react";
+import type { ChangeEvent } from "react";
 import { toast } from "sonner";
+import { useObjectUrls } from "@/hook/useObjectUrls";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
@@ -15,17 +16,7 @@ type Props = {
 };
 
 export function PhotoPicker({ files, onChange, max = 5, disabled }: Props) {
-  const previews = useMemo(
-    () => files.map((file) => ({ file, url: URL.createObjectURL(file) })),
-    [files],
-  );
-
-  useEffect(
-    () => () => {
-      for (const p of previews) URL.revokeObjectURL(p.url);
-    },
-    [previews],
-  );
+  const previews = useObjectUrls(files);
 
   const handleSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const picked = Array.from(event.target.files ?? []);

@@ -44,40 +44,47 @@ export default function DemoLoginPanel({ pending, onSelect }: Props) {
       </h2>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        {DEMO_ACCOUNTS.map((account) => (
-          <div
-            key={account.role}
-            className="flex flex-col gap-2 rounded-lg border bg-background p-3"
-          >
-            <div className="flex items-center gap-2 text-primary">
-              {ICONS[account.role]}
-              <span className="text-sm font-semibold text-foreground">
-                {account.label}
-              </span>
-            </div>
+        {DEMO_ACCOUNTS.map((account) => {
+          const missing = !account.email || !account.password;
 
-            <p className="flex-1 text-[11px] leading-4 text-muted-foreground">
-              {account.description}
-            </p>
-
-            <Button
-              type="button"
-              variant="outline"
-              disabled={pending}
-              onClick={() => handleClick(account)}
-              className="h-8 w-full"
+          return (
+            <div
+              key={account.role}
+              className="flex flex-col gap-2 rounded-lg border bg-background p-3"
             >
-              {pending && activeRole === account.role ? (
-                <>
-                  <Spinner data-icon="inline-start" />
-                  Signing in...
-                </>
-              ) : (
-                "Demo Login"
-              )}
-            </Button>
-          </div>
-        ))}
+              <div className="flex items-center gap-2 text-primary">
+                {ICONS[account.role]}
+                <span className="text-sm font-semibold text-foreground">
+                  {account.label}
+                </span>
+              </div>
+
+              <p className="flex-1 text-[11px] leading-4 text-muted-foreground">
+                {account.description}
+              </p>
+
+              <Button
+                type="button"
+                variant="outline"
+                disabled={pending || missing}
+                title={
+                  missing ? "Demo credentials not configured" : undefined
+                }
+                onClick={() => handleClick(account)}
+                className="h-8 w-full"
+              >
+                {pending && activeRole === account.role ? (
+                  <>
+                    <Spinner data-icon="inline-start" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Demo Login"
+                )}
+              </Button>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
