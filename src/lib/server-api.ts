@@ -5,7 +5,7 @@ import type { PublicStats } from "@/types/public.type";
 
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:5000/api/v1";
 
-async function serverGet<T>(path: string, revalidate = 300): Promise<T | null> {
+async function serverGet<T>(path: string, revalidate = 30): Promise<T | null> {
   try {
     const res = await fetch(`${BACKEND_URL}${path}`, {
       next: { revalidate },

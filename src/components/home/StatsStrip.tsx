@@ -1,4 +1,6 @@
 import { Building2, CircleCheck, ClipboardList, Star } from "lucide-react";
+import { CountUp } from "@/components/motion/CountUp";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { StatCard } from "@/components/shared/StatCard";
 import type { PublicStats } from "@/types/public.type";
 
@@ -7,34 +9,48 @@ export function StatsStrip({ stats }: { stats: PublicStats | null }) {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Requests filed"
-          value={stats.totalRequests.toLocaleString()}
-          icon={ClipboardList}
-        />
-        <StatCard
-          title="Issues resolved"
-          value={stats.resolvedRequests.toLocaleString()}
-          icon={CircleCheck}
-          tone="success"
-        />
-        <StatCard
-          title="City departments"
-          value={stats.departments}
-          icon={Building2}
-        />
-        <StatCard
-          title="Citizen rating"
-          value={
-            stats.averageRating
-              ? `${stats.averageRating.toFixed(1)} / 5`
-              : "New"
-          }
-          icon={Star}
-          tone="warning"
-        />
-      </div>
+      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerItem>
+          <StatCard
+            title="Requests filed"
+            value={<CountUp value={stats.totalRequests} />}
+            icon={ClipboardList}
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="Issues resolved"
+            value={<CountUp value={stats.resolvedRequests} />}
+            icon={CircleCheck}
+            tone="success"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="City departments"
+            value={<CountUp value={stats.departments} />}
+            icon={Building2}
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="Citizen rating"
+            value={
+              stats.averageRating ? (
+                <CountUp
+                  value={stats.averageRating}
+                  decimals={1}
+                  suffix=" / 5"
+                />
+              ) : (
+                "New"
+              )
+            }
+            icon={Star}
+            tone="warning"
+          />
+        </StaggerItem>
+      </Stagger>
     </section>
   );
 }

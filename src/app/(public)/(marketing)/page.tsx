@@ -6,6 +6,8 @@ import { CtaBanner } from "@/components/home/CtaBanner";
 import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { StatsStrip } from "@/components/home/StatsStrip";
+import { Reveal } from "@/components/motion/Reveal";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import {
   getPublicCategories,
@@ -40,16 +42,22 @@ export default async function HomePage() {
 
       {categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <SectionHeading
-            eyebrow="Services"
-            title="Popular city services"
-            description="Free complaints and paid permits, each with a clear resolution time."
-          />
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Services"
+              title="Popular city services"
+              description="Free complaints and paid permits, each with a clear resolution time."
+            />
+          </Reveal>
+
+          <Stagger className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {categories.slice(0, 6).map((c) => (
-              <CategoryCard key={c.id} category={c} />
+              <StaggerItem key={c.id}>
+                <CategoryCard category={c} />
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
+
           <div className="mt-8 text-center">
             <Link
               href="/services"
@@ -64,29 +72,35 @@ export default async function HomePage() {
       {departments.length > 0 && (
         <section className="border-y bg-muted/40">
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-            <SectionHeading
-              eyebrow="Departments"
-              title="Who handles your request"
-            />
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Departments"
+                title="Who handles your request"
+              />
+            </Reveal>
+
+            <Stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {departments.map((d) => (
-                <Link
-                  key={d.id}
-                  href={`/services?department=${d.id}`}
-                  className="rounded-xl border bg-background p-5 transition-shadow hover:shadow-md"
-                >
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Building2 className="size-5" />
-                  </div>
-                  <h3 className="mt-3 text-sm font-semibold">{d.name}</h3>
-                  {d.description && (
-                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      {d.description}
-                    </p>
-                  )}
-                </Link>
+                <StaggerItem key={d.id}>
+                  <Link
+                    href={`/services?department=${d.id}`}
+                    className="group block rounded-xl border bg-background p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                  >
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                      <Building2 className="size-5" />
+                    </div>
+
+                    <h3 className="mt-3 text-sm font-semibold">{d.name}</h3>
+
+                    {d.description && (
+                      <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                        {d.description}
+                      </p>
+                    )}
+                  </Link>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
         </section>
       )}

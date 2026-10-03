@@ -226,7 +226,7 @@ export function DepartmentManager() {
                     </TableCell>
                     <TableCell>
                       <StatusBadge
-                        status={d.deletedAt ? "BLOCKED" : "ACTIVE"}
+                        status={d.deletedAt ? "DELETED" : "ACTIVE"}
                       />
                     </TableCell>
                     <TableCell>{formatDate(d.createdAt)}</TableCell>

@@ -1,4 +1,5 @@
 import { Bell, CreditCard, FilePlus, Wrench } from "lucide-react";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
 const STEPS = [
@@ -33,25 +34,32 @@ export function HowItWorks() {
           title="From complaint to resolution in four steps"
         />
 
-        <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger
+          as="ol"
+          className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {STEPS.map((step, i) => (
-            <li
+            <StaggerItem
+              as="li"
               key={step.title}
-              className="relative rounded-xl border bg-background p-5"
+              className="group relative rounded-xl border bg-background p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
             >
-              <span className="absolute top-4 right-4 text-3xl font-bold text-muted-foreground/20">
+              <span className="absolute top-4 right-4 text-3xl font-bold text-muted-foreground/20 transition-colors group-hover:text-primary/30">
                 {i + 1}
               </span>
-              <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+
+              <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
                 <step.icon className="size-5" />
               </div>
+
               <h3 className="mt-4 text-base font-semibold">{step.title}</h3>
+
               <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
                 {step.text}
               </p>
-            </li>
+            </StaggerItem>
           ))}
-        </ol>
+        </Stagger>
       </div>
     </section>
   );

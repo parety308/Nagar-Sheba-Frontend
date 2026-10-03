@@ -6,19 +6,34 @@ import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hook/useDebounce";
 import { useUrlState } from "@/hook/useUrlState";
 
-type Props = { paramKey?: string; placeholder?: string };
+type Props = {
+  paramKey?: string;
+  placeholder?: string;
+};
 
 export function SearchInput({
   paramKey = "search",
   placeholder = "Search...",
 }: Props) {
   const { get, setParams } = useUrlState();
-  const [value, setValue] = useState(get(paramKey));
+  const urlValue = get(paramKey);
+  const [value, setValue] = useState(urlValue);
   const debounced = useDebounce(value, 400);
 
+  // Only reset the input when the URL is cleared externally
+  // (Clear button, browser back/forward navigation, etc.).
+  useEffect(() => {
+    if (urlValue === "") {
+      setValue("");
+    }
+  }, [urlValue]);
+
+  // Update the URL after the user stops typing.
   // biome-ignore lint/correctness/useExhaustiveDependencies: only react to the debounced value
   useEffect(() => {
-    if (debounced !== get(paramKey)) setParams({ [paramKey]: debounced });
+    if (debounced !== get(paramKey)) {
+      setParams({ [paramKey]: debounced });
+    }
   }, [debounced]);
 
   return (

@@ -2,6 +2,8 @@ import { SearchX } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CategoryCard } from "@/components/home/CategoryCard";
+import { Reveal } from "@/components/motion/Reveal";
+import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { getPublicCategories, getPublicDepartments } from "@/lib/server-api";
@@ -36,6 +38,7 @@ export default async function ServicesPage({ searchParams }: Props) {
     : categories;
 
   const grouped = new Map<string, Category[]>();
+
   for (const c of filtered) {
     const key = c.department?.name ?? "Other";
     grouped.set(key, [...(grouped.get(key) ?? []), c]);
@@ -48,7 +51,7 @@ export default async function ServicesPage({ searchParams }: Props) {
         description="Choose the service you need. Fees and resolution times are shown up front."
       />
 
-      <div
+      <nav
         className="mb-8 flex flex-wrap gap-2"
         aria-label="Filter by department"
       >
@@ -63,6 +66,7 @@ export default async function ServicesPage({ searchParams }: Props) {
         >
           All
         </Link>
+
         {departments.map((d) => (
           <Link
             key={d.id}
@@ -77,7 +81,7 @@ export default async function ServicesPage({ searchParams }: Props) {
             {d.name}
           </Link>
         ))}
-      </div>
+      </nav>
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -89,12 +93,17 @@ export default async function ServicesPage({ searchParams }: Props) {
         <div className="space-y-10">
           {[...grouped.entries()].map(([name, items]) => (
             <section key={name}>
-              <h2 className="mb-4 text-lg font-semibold">{name}</h2>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <Reveal>
+                <h2 className="mb-4 text-lg font-semibold">{name}</h2>
+              </Reveal>
+
+              <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((c) => (
-                  <CategoryCard key={c.id} category={c} />
+                  <StaggerItem key={c.id}>
+                    <CategoryCard category={c} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </Stagger>
             </section>
           ))}
         </div>

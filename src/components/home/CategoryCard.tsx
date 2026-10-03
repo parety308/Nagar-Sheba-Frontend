@@ -8,7 +8,11 @@ export function CategoryCard({ category }: { category: Category }) {
   const isPaid = category.feeType === "PAID";
 
   return (
-    <div className="group flex flex-col rounded-xl border bg-card p-5 transition-shadow hover:shadow-md">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100"
+      />
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold leading-snug">
           {category.name}

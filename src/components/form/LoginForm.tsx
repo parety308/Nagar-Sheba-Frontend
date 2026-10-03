@@ -258,7 +258,7 @@ export default function LoginForm() {
           <UserPlus className="size-4 text-primary" />
           Create a new citizen account
         </Link>
-<GoogleSignInButton />
+        <GoogleSignInButton />
         <p className="mt-1 text-center text-xs leading-5 text-muted-foreground">
           By continuing, you agree to our{" "}
           <Link
