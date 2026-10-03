@@ -59,7 +59,7 @@ export default function DemoLoginPanel({ pending, onSelect }: Props) {
                 </span>
               </div>
 
-              <p className="flex-1 text-[11px] leading-4 text-muted-foreground">
+              <p className="flex-1 text-xs leading-4 text-muted-foreground">
                 {account.description}
               </p>
 
@@ -67,9 +67,7 @@ export default function DemoLoginPanel({ pending, onSelect }: Props) {
                 type="button"
                 variant="outline"
                 disabled={pending || missing}
-                title={
-                  missing ? "Demo credentials not configured" : undefined
-                }
+                title={missing ? "Demo credentials not configured" : undefined}
                 onClick={() => handleClick(account)}
                 className="h-8 w-full"
               >

@@ -3,7 +3,7 @@
 import { Menu, ShieldCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
@@ -29,6 +29,21 @@ export default function Navbar() {
   const { mutate: logout, isPending: logoutPending } = useLogOut();
 
   const isLoggedIn = !!profile;
+
+  // Close on route change and on Escape
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger
+  useEffect(() => setMobileMenuOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileMenuOpen]);
 
   const handleLogout = () => {
     logout(undefined, {
@@ -73,7 +88,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
           {navItems.map((item) => {
             const isActive =
               item.href === "/"
@@ -84,6 +99,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
@@ -153,6 +169,7 @@ export default function Navbar() {
             className="flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
           >
             {mobileMenuOpen ? (
               <X className="size-5" />
@@ -165,9 +182,9 @@ export default function Navbar() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="border-t bg-background md:hidden">
+        <div id="mobile-nav" className="border-t bg-background md:hidden">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-            <nav className="flex flex-col gap-1">
+            <nav className="flex flex-col gap-1" aria-label="Main">
               {navItems.map((item) => {
                 const isActive =
                   item.href === "/"
@@ -179,6 +196,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={closeMobileMenu}
+                    aria-current={isActive ? "page" : undefined}
                     className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
                       isActive
                         ? "bg-primary/10 text-primary"

@@ -65,7 +65,7 @@ export default function RegisterForm() {
       address: "",
       password: "",
     },
-    validators: { onSubmit: RegisterZodSchema },
+    validators: { onChange: RegisterZodSchema, onSubmit: RegisterZodSchema },
     onSubmit: ({ value }) => {
       register(value, {
         onSuccess: () => {

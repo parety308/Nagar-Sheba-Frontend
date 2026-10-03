@@ -37,7 +37,7 @@ function ReassignForm({ request }: { request: ServiceRequest }) {
       staffId: request.assignedStaffId ?? "",
       reason: "",
     },
-    validators: { onSubmit: ReassignZodSchema },
+    validators: { onChange: ReassignZodSchema, onSubmit: ReassignZodSchema },
     onSubmit: ({ value }) => {
       const reason = value.reason.trim() || undefined;
       // staffId wins (the API derives the department from the staff member);
@@ -164,7 +164,10 @@ function StatusOverrideForm({ request }: { request: ServiceRequest }) {
 
   const form = useForm({
     defaultValues: { toStatus: "", note: "" },
-    validators: { onSubmit: StatusOverrideZodSchema },
+    validators: {
+      onChange: StatusOverrideZodSchema,
+      onSubmit: StatusOverrideZodSchema,
+    },
     onSubmit: ({ value }) => {
       update(
         {
@@ -254,7 +257,7 @@ function StatusOverrideForm({ request }: { request: ServiceRequest }) {
           "Apply override"
         )}
       </Button>
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         Overrides are recorded in the audit log.
       </p>
     </form>

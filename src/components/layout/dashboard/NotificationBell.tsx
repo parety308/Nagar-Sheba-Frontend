@@ -25,18 +25,18 @@ import type { UserRole } from "@/types/auth.type";
 export function NotificationBell({ role }: { role: UserRole }) {
   const { data } = useUnreadNotificationCount();
   const count = data?.data.unreadCount ?? 0;
- const prev = useRef(count);
-const [ring, setRing] = useState(false);
+  const prev = useRef(count);
+  const [ring, setRing] = useState(false);
 
-useEffect(() => {
-  if (count > prev.current) {
-    setRing(true);
-    const t = setTimeout(() => setRing(false), 800);
+  useEffect(() => {
+    if (count > prev.current) {
+      setRing(true);
+      const t = setTimeout(() => setRing(false), 800);
+      prev.current = count;
+      return () => clearTimeout(t);
+    }
     prev.current = count;
-    return () => clearTimeout(t);
-  }
-  prev.current = count;
-}, [count]);
+  }, [count]);
 
   return (
     <DropdownMenu>
@@ -47,14 +47,14 @@ useEffect(() => {
         className="relative flex size-9 items-center justify-center rounded-lg text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         <Bell className={cn("size-5", ring && "animate-bell")} />
-{count > 0 && (
-  <span
-    key={count}
-    className="absolute top-0.5 right-0.5 flex h-4 min-w-4 animate-pop items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-white"
-  >
-    {count > 99 ? "99+" : count}
-  </span>
-)}
+        {count > 0 && (
+          <span
+            key={count}
+            className="absolute top-0.5 right-0.5 flex h-4 min-w-4 animate-pop items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-white"
+          >
+            {count > 99 ? "99+" : count}
+          </span>
+        )}
       </DropdownMenuTrigger>
 
       {/* Content unmounts when closed, so the list only fetches on open */}

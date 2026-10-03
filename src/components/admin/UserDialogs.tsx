@@ -63,7 +63,10 @@ function StaffForm({ onDone }: { onDone: () => void }) {
       departmentId: "",
       title: "",
     },
-    validators: { onSubmit: ProvisionStaffZodSchema },
+    validators: {
+      onChange: ProvisionStaffZodSchema,
+      onSubmit: ProvisionStaffZodSchema,
+    },
     onSubmit: ({ value }) => {
       const isStaff = value.role === "STAFF";
       create(
@@ -245,7 +248,10 @@ function RoleForm({ user, onDone }: { user: AdminUser; onDone: () => void }) {
       departmentId: "",
       title: "",
     },
-    validators: { onSubmit: ChangeRoleZodSchema },
+    validators: {
+      onChange: ChangeRoleZodSchema,
+      onSubmit: ChangeRoleZodSchema,
+    },
     onSubmit: ({ value }) => {
       change(
         {
@@ -344,7 +350,7 @@ function RoleForm({ user, onDone }: { user: AdminUser; onDone: () => void }) {
         }
       </form.Subscribe>
 
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         Moving a staff member away from STAFF unassigns their open requests.
       </p>
 

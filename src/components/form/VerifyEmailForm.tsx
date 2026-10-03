@@ -21,7 +21,10 @@ export default function VerifyEmailForm() {
 
   const form = useForm({
     defaultValues: { email, otp: "" },
-    validators: { onSubmit: VerifyEmailZodSchema },
+    validators: {
+      onChange: VerifyEmailZodSchema,
+      onSubmit: VerifyEmailZodSchema,
+    },
     onSubmit: ({ value }) => {
       verify(value, {
         onSuccess: () => {

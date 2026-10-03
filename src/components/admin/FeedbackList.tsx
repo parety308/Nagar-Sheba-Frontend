@@ -101,7 +101,7 @@ export function FeedbackList({ requestBasePath }: { requestBasePath: string }) {
                         {f.request?.trackingRef ?? f.requestId.slice(0, 8)}
                       </Link>
                       {f.request?.title && (
-                        <p className="max-w-56 truncate text-[11px] text-muted-foreground">
+                        <p className="max-w-56 truncate text-xs text-muted-foreground">
                           {f.request.title}
                         </p>
                       )}

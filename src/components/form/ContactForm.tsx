@@ -41,7 +41,7 @@ export default function ContactForm() {
 
   const form = useForm({
     defaultValues: { name: "", email: "", subject: "", message: "" },
-    validators: { onSubmit: ContactZodSchema },
+    validators: { onChange: ContactZodSchema, onSubmit: ContactZodSchema },
     onSubmit: ({ value }) => {
       send(value, {
         onSuccess: () => {

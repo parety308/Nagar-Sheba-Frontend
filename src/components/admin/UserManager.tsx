@@ -166,7 +166,7 @@ export function UserManager() {
                     <TableRow key={u.id}>
                       <TableCell className="px-4">
                         <p className="font-medium">{displayName(u)}</p>
-                        <p className="text-[11px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           {u.email}
                         </p>
                       </TableCell>
@@ -182,7 +182,7 @@ export function UserManager() {
                       <TableCell>{formatDate(u.createdAt)}</TableCell>
                       <TableCell className="pr-4 text-right">
                         {isSelf ? (
-                          <span className="text-[11px] text-muted-foreground">
+                          <span className="text-xs text-muted-foreground">
                             You
                           </span>
                         ) : (

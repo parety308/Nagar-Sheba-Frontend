@@ -112,7 +112,7 @@ export function NotificationList() {
                   <p className={cn("text-sm", !n.isRead && "font-medium")}>
                     {n.message}
                   </p>
-                  <p className="mt-1 text-[11px] text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {toEnumLabel(n.type)} · {timeAgo(n.createdAt)} ·{" "}
                     {formatDateTime(n.createdAt)}
                   </p>

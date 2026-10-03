@@ -21,7 +21,10 @@ function ResolveForm({ request }: { request: ServiceRequest }) {
 
   const form = useForm({
     defaultValues: { note: "" },
-    validators: { onSubmit: ResolveRequestZodSchema },
+    validators: {
+      onChange: ResolveRequestZodSchema,
+      onSubmit: ResolveRequestZodSchema,
+    },
     onSubmit: ({ value }) => {
       update(
         {

@@ -19,7 +19,7 @@ export function FilterSelect({
   disabled,
 }: Props) {
   return (
-    <label className="flex flex-col gap-1 text-[11px] font-medium text-muted-foreground sm:w-44">
+    <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground sm:w-44">
       {label}
       <select
         value={value}

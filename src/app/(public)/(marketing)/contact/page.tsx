@@ -2,6 +2,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { Metadata } from "next";
 import ContactForm from "@/components/form/ContactForm";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { SITE } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -14,19 +15,14 @@ export const metadata: Metadata = {
 };
 
 const INFO = [
-  { icon: MapPin, label: "Office", value: "Dhaka, Bangladesh" },
+  { icon: MapPin, label: "Office", value: SITE.address },
   {
     icon: Mail,
     label: "Email",
-    value: "parvezyesrat17032024@gmail.com",
-    href: "mailto:parvezyesrat17032024@gmail.com",
+    value: SITE.email,
+    href: `mailto:${SITE.email}`,
   },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+880 18-76097788",
-    href: "tel:+8801876097788",
-  },
+  { icon: Phone, label: "Phone", value: SITE.phone, href: SITE.phoneHref },
   { icon: Clock, label: "Hours", value: "Sat - Thu, 9:00 AM - 5:00 PM" },
 ];
 

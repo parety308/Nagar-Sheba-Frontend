@@ -35,7 +35,10 @@ export function ReopenDialog({ request }: { request: ServiceRequest }) {
 
   const form = useForm({
     defaultValues: { reason: "" },
-    validators: { onSubmit: ReopenRequestZodSchema },
+    validators: {
+      onChange: ReopenRequestZodSchema,
+      onSubmit: ReopenRequestZodSchema,
+    },
     onSubmit: ({ value }) => {
       reopen(
         { id: request.id, payload: { reason: value.reason.trim() } },

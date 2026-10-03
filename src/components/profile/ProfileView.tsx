@@ -152,7 +152,7 @@ function AvatarCard({ profile }: { profile: AuthUser }) {
           <p className="truncate text-xs text-muted-foreground">
             {profile.email}
           </p>
-          <p className="mt-1 text-[11px] font-medium tracking-widest text-primary uppercase">
+          <p className="mt-1 text-xs font-medium tracking-widest text-primary uppercase">
             {ROLE_LABEL[profile.role]}
           </p>
           {profile.staffProfile?.department && (
@@ -186,7 +186,7 @@ function AvatarCard({ profile }: { profile: AuthUser }) {
             </>
           )}
         </Button>
-        <p className="text-[11px] text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           JPEG, PNG or WEBP, up to 5 MB.
         </p>
       </CardContent>
@@ -209,7 +209,10 @@ function DetailsForm({ profile }: { profile: AuthUser }) {
       address: profile.citizenProfile?.address ?? "",
       title: profile.staffProfile?.title ?? "",
     },
-    validators: { onSubmit: UpdateProfileZodSchema },
+    validators: {
+      onChange: UpdateProfileZodSchema,
+      onSubmit: UpdateProfileZodSchema,
+    },
     onSubmit: ({ value }) => {
       const payload: Record<string, string> = {
         fullName: value.fullName.trim(),
@@ -305,7 +308,10 @@ function PasswordForm({ profile }: { profile: AuthUser }) {
 
   const form = useForm({
     defaultValues: { currentPassword: "", newPassword: "" },
-    validators: { onSubmit: ChangePasswordZodSchema },
+    validators: {
+      onChange: ChangePasswordZodSchema,
+      onSubmit: ChangePasswordZodSchema,
+    },
     onSubmit: ({ value }) => {
       change(value, {
         onSuccess: () => {

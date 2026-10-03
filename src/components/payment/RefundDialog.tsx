@@ -28,7 +28,7 @@ export function RefundDialog({ payment }: { payment: Payment }) {
 
   const form = useForm({
     defaultValues: { reason: "" },
-    validators: { onSubmit: RefundZodSchema },
+    validators: { onChange: RefundZodSchema, onSubmit: RefundZodSchema },
     onSubmit: ({ value }) => {
       // Always send an object: the API validates the body and Express 5
       // leaves req.body undefined when nothing is sent.

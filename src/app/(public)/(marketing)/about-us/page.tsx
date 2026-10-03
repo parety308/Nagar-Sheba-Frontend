@@ -1,4 +1,3 @@
-
 import { Eye, HeartHandshake, ShieldCheck, Users, Wrench } from "lucide-react";
 import type { Metadata } from "next";
 import { Reveal } from "@/components/motion/Reveal";

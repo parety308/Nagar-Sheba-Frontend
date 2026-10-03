@@ -2,6 +2,7 @@
 
 import {
   AlarmClock,
+  CircleCheck,
   ClipboardList,
   Inbox,
   Star,
@@ -40,7 +41,11 @@ const tooltipStyle = {
   borderRadius: 8,
   fontSize: 12,
 };
-const tick = { fontSize: 11, fill: "var(--muted-foreground)" };
+
+const tick = {
+  fontSize: 11,
+  fill: "var(--muted-foreground)",
+};
 
 export function AdminOverview() {
   const stats = useDashboardStats();
@@ -73,10 +78,23 @@ export function AdminOverview() {
   }));
 
   const admins = Math.max(s.users.total - s.users.citizens - s.users.staff, 0);
+
   const userData = [
-    { name: "Citizens", value: s.users.citizens, fill: "var(--chart-1)" },
-    { name: "Staff", value: s.users.staff, fill: "var(--chart-3)" },
-    { name: "Admins", value: admins, fill: "var(--chart-5)" },
+    {
+      name: "Citizens",
+      value: s.users.citizens,
+      fill: "var(--chart-1)",
+    },
+    {
+      name: "Staff",
+      value: s.users.staff,
+      fill: "var(--chart-3)",
+    },
+    {
+      name: "Admins",
+      value: admins,
+      fill: "var(--chart-5)",
+    },
   ];
 
   return (
@@ -92,6 +110,7 @@ export function AdminOverview() {
           value={s.requests.total.toLocaleString()}
           icon={ClipboardList}
         />
+
         <StatCard
           title="Overdue requests"
           value={s.requests.overdue}
@@ -99,11 +118,13 @@ export function AdminOverview() {
           tone={s.requests.overdue > 0 ? "danger" : "success"}
           hint="Past their SLA deadline"
         />
+
         <StatCard
           title="Registered users"
           value={s.users.total.toLocaleString()}
           icon={Users}
         />
+
         <StatCard
           title="Revenue collected"
           value={formatCurrency(s.payments.totalRevenue)}
@@ -111,6 +132,7 @@ export function AdminOverview() {
           tone="success"
           hint={`${s.payments.pending} payment(s) pending`}
         />
+
         <StatCard
           title="Average rating"
           value={
@@ -121,6 +143,23 @@ export function AdminOverview() {
           icon={Star}
           tone="warning"
         />
+
+        <StatCard
+          title="Resolution rate"
+          value={
+            s.requests.total
+              ? `${Math.round(
+                  (((s.requests.byStatus.RESOLVED ?? 0) +
+                    (s.requests.byStatus.CLOSED ?? 0)) /
+                    s.requests.total) *
+                    100,
+                )}%`
+              : "—"
+          }
+          icon={CircleCheck}
+          tone="success"
+          hint="Resolved or closed"
+        />
       </div>
 
       <div className="mb-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -128,6 +167,7 @@ export function AdminOverview() {
           <CardHeader>
             <CardTitle>Requests by status</CardTitle>
           </CardHeader>
+
           <CardContent>
             <div
               role="img"
@@ -165,6 +205,24 @@ export function AdminOverview() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+
+            <table className="sr-only">
+              <caption>Requests by status</caption>
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Requests</th>
+                </tr>
+              </thead>
+              <tbody>
+                {statusData.map((d) => (
+                  <tr key={d.name}>
+                    <td>{d.name}</td>
+                    <td>{d.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </CardContent>
         </Card>
 
@@ -172,6 +230,7 @@ export function AdminOverview() {
           <CardHeader>
             <CardTitle>Users by role</CardTitle>
           </CardHeader>
+
           <CardContent>
             <div
               role="img"
@@ -197,6 +256,24 @@ export function AdminOverview() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
+
+            <table className="sr-only">
+              <caption>Users by role</caption>
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userData.map((d) => (
+                  <tr key={d.name}>
+                    <td>{d.name}</td>
+                    <td>{d.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </CardContent>
         </Card>
       </div>
@@ -211,6 +288,7 @@ export function AdminOverview() {
             View all
           </Link>
         </CardHeader>
+
         <CardContent>
           {recent.isLoading ? (
             <div className="space-y-2">
@@ -235,7 +313,7 @@ export function AdminOverview() {
                   >
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">{r.title}</p>
-                      <p className="font-mono text-[11px] text-muted-foreground">
+                      <p className="font-mono text-xs text-muted-foreground">
                         {r.trackingRef} · {r.department?.name} ·{" "}
                         {formatDate(r.createdAt)}
                       </p>

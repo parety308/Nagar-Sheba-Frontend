@@ -21,7 +21,7 @@ export function FeedbackCard({ request }: { request: ServiceRequest }) {
 
   const form = useForm({
     defaultValues: { rating: 0, comment: "" },
-    validators: { onSubmit: FeedbackZodSchema },
+    validators: { onChange: FeedbackZodSchema, onSubmit: FeedbackZodSchema },
     onSubmit: ({ value }) => {
       submit(
         {

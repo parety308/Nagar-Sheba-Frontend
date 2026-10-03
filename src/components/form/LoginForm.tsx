@@ -68,6 +68,7 @@ export default function LoginForm() {
       password: "",
     },
     validators: {
+      onBlur: LoginZodSchema,
       onSubmit: LoginZodSchema,
     },
     onSubmit: ({ value }) => {
@@ -76,7 +77,7 @@ export default function LoginForm() {
   });
   return (
     <div className="w-full rounded-xl bg-card/90 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6">
         <div className="flex items-center gap-3">
           <div className="flex size-12 items-center justify-center rounded-lg bg-muted p-2 shadow-inner">
             <div className="flex size-full items-center justify-center rounded-md bg-primary/10">
@@ -86,9 +87,7 @@ export default function LoginForm() {
 
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold tracking-tight">
-                Citizen Sign In
-              </h1>
+              <h1 className="text-xl font-semibold tracking-tight">Sign in</h1>
               <Verified
                 className="size-4 text-primary"
                 aria-label="Secured authentication"
@@ -96,15 +95,10 @@ export default function LoginForm() {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Access Smart City Dhaka utilities & records
+              Citizens, staff and administrators use the same form.
             </p>
           </div>
         </div>
-
-        <span className="inline-flex shrink-0 items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-          <span className="size-1.5 animate-ping rounded-full bg-primary" />
-          2.0 LIVE
-        </span>
       </div>
 
       <form
@@ -147,7 +141,7 @@ export default function LoginForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    placeholder="citizen@example.com"
+                    placeholder="you@example.com"
                     className="h-11 pl-10"
                   />
                 </div>

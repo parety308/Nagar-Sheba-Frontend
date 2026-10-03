@@ -71,7 +71,7 @@ export function PhotoPicker({ files, onChange, max = 5, disabled }: Props) {
         ))}
 
         {files.length < max && (
-          <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-[11px] text-muted-foreground transition-colors hover:bg-muted has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+          <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-xs text-muted-foreground transition-colors hover:bg-muted has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
             <ImagePlus className="size-5" />
             Add photo
             <input
@@ -85,7 +85,7 @@ export function PhotoPicker({ files, onChange, max = 5, disabled }: Props) {
           </label>
         )}
       </div>
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         {files.length} / {max} photos. Images only, up to 5 MB each.
       </p>
     </div>

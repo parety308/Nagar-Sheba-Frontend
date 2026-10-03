@@ -125,7 +125,7 @@ export function CitizenOverview() {
                   >
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">{r.title}</p>
-                      <p className="font-mono text-[11px] text-muted-foreground">
+                      <p className="font-mono text-xs text-muted-foreground">
                         {r.trackingRef} · {formatDate(r.createdAt)}
                       </p>
                     </div>

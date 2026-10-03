@@ -131,7 +131,7 @@ export function PaymentList({ requestBasePath, canRefund = false }: Props) {
                         {p.request?.trackingRef ?? p.requestId.slice(0, 8)}
                       </Link>
                       {p.request?.title && (
-                        <p className="max-w-56 truncate text-[11px] text-muted-foreground">
+                        <p className="max-w-56 truncate text-xs text-muted-foreground">
                           {p.request.title}
                         </p>
                       )}

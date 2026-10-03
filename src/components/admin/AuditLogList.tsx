@@ -98,7 +98,7 @@ export function AuditLogList() {
                     </TableCell>
                     <TableCell>
                       {log.entityType}
-                      <p className="font-mono text-[11px] text-muted-foreground">
+                      <p className="font-mono text-xs text-muted-foreground">
                         {log.entityId.slice(0, 8)}
                       </p>
                     </TableCell>
@@ -108,7 +108,7 @@ export function AuditLogList() {
                           <summary className="cursor-pointer text-primary">
                             View
                           </summary>
-                          <pre className="mt-2 max-w-72 overflow-x-auto rounded-md bg-muted p-2 text-[11px] whitespace-pre-wrap">
+                          <pre className="mt-2 max-w-72 overflow-x-auto rounded-md bg-muted p-2 text-xs whitespace-pre-wrap">
                             {JSON.stringify(
                               {
                                 before: log.previousValue,

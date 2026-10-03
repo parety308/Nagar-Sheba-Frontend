@@ -72,11 +72,11 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-60">
         <div className="px-2 py-2">
           <p className="truncate text-xs font-semibold">{name}</p>
-          <p className="truncate text-[11px] text-muted-foreground">
+          <p className="truncate text-xs text-muted-foreground">
             {profile.email}
           </p>
           {profile.staffProfile?.department && (
-            <p className="mt-1 truncate text-[11px] text-primary">
+            <p className="mt-1 truncate text-xs text-primary">
               {profile.staffProfile.department.name}
             </p>
           )}

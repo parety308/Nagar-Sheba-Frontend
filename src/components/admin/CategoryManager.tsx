@@ -82,7 +82,7 @@ function CategoryForm({
       feeAmount: category?.feeAmount ? String(Number(category.feeAmount)) : "",
       slaHours: category ? String(category.slaHours) : "",
     },
-    validators: { onSubmit: CategoryZodSchema },
+    validators: { onChange: CategoryZodSchema, onSubmit: CategoryZodSchema },
     onSubmit: ({ value }) => {
       const paid = value.feeType === "PAID";
       const base = {

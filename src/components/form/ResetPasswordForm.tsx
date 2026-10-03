@@ -23,7 +23,10 @@ export default function ResetPasswordForm() {
 
   const form = useForm({
     defaultValues: { email, otp: "", newPassword: "" },
-    validators: { onSubmit: ResetPasswordZodSchema },
+    validators: {
+      onChange: ResetPasswordZodSchema,
+      onSubmit: ResetPasswordZodSchema,
+    },
     onSubmit: ({ value }) => {
       reset(value, {
         onSuccess: () => {

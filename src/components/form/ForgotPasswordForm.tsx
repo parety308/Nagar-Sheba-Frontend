@@ -19,7 +19,10 @@ export default function ForgotPasswordForm() {
 
   const form = useForm({
     defaultValues: { email: "" },
-    validators: { onSubmit: ForgotPasswordZodSchema },
+    validators: {
+      onChange: ForgotPasswordZodSchema,
+      onSubmit: ForgotPasswordZodSchema,
+    },
     onSubmit: ({ value }) => {
       forgot(value, {
         onSuccess: () => {
@@ -78,7 +81,7 @@ export default function ForgotPasswordForm() {
                   name={field.name}
                   type="email"
                   autoComplete="email"
-                  placeholder="citizen@example.com"
+                  placeholder="you@example.com"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}

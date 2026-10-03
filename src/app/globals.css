@@ -286,7 +286,6 @@
   animation: shimmer 2s infinite;
 }
 
-
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

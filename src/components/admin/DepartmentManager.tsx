@@ -71,7 +71,10 @@ function DepartmentForm({
       name: department?.name ?? "",
       description: department?.description ?? "",
     },
-    validators: { onSubmit: DepartmentZodSchema },
+    validators: {
+      onChange: DepartmentZodSchema,
+      onSubmit: DepartmentZodSchema,
+    },
     onSubmit: ({ value }) => {
       const name = value.name.trim();
       const description = value.description.trim();

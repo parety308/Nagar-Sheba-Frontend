@@ -97,7 +97,10 @@ export default function NewRequestWizard({
       latitude: "",
       longitude: "",
     } satisfies FormValues,
-    validators: { onSubmit: CreateRequestZodSchema },
+    validators: {
+      onChange: CreateRequestZodSchema,
+      onSubmit: CreateRequestZodSchema,
+    },
     onSubmit: ({ value }) => {
       const formData = new FormData();
       formData.append("categoryId", value.categoryId);
@@ -381,7 +384,7 @@ export default function NewRequestWizard({
                         <FieldError errors={field.state.meta.errors} />
                       )}
                     </div>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       {field.state.value.length} / 2000
                     </span>
                   </div>

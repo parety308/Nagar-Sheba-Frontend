@@ -84,8 +84,8 @@ export function DashboardShell({ userRole, children }: Props) {
         )}
 
         <main id="main" className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
-  {ready ? children : <DashboardPageSkeleton />}
-</main>
+          {ready ? children : <DashboardPageSkeleton />}
+        </main>
       </div>
     </div>
   );
