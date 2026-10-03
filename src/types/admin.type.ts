@@ -39,4 +39,5 @@ export type DashboardStats = {
   };
   payments: { totalRevenue: string | number; pending: number };
   feedback: { averageRating: number | null };
+  byDepartment?: { departmentId: string; name: string; total: number }[];
 };

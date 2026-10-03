@@ -97,6 +97,10 @@ export function AdminOverview() {
     },
   ];
 
+  const deptData = (s.requests.byDepartment ?? []).map((d) => ({
+  name: d.name,
+  value: d.total,
+}));
   return (
     <div>
       <PageHeader
@@ -289,6 +293,59 @@ export function AdminOverview() {
           </Link>
         </CardHeader>
 
+{deptData.length > 0 && (
+  <Card className="mb-6">
+    <CardHeader>
+      <CardTitle>Requests by department</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div
+        role="img"
+        aria-label="Bar chart of request counts by department"
+        className="w-full"
+        style={{ height: Math.max(deptData.length * 48, 160) }}
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={deptData}
+            layout="vertical"
+            margin={{ left: 8, right: 16 }}
+          >
+            <CartesianGrid
+              horizontal={false}
+              stroke="var(--border)"
+              strokeDasharray="3 3"
+            />
+            <XAxis type="number" allowDecimals={false} tick={tick} />
+            <YAxis type="category" dataKey="name" width={150} tick={tick} />
+            <Tooltip
+              contentStyle={tooltipStyle}
+              cursor={{ fill: "var(--muted)", opacity: 0.4 }}
+            />
+            <Bar
+              dataKey="value"
+              name="Requests"
+              fill="var(--chart-3)"
+              radius={[0, 4, 4, 0]}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <table className="sr-only">
+        <caption>Requests by department</caption>
+        <thead>
+          <tr><th>Department</th><th>Requests</th></tr>
+        </thead>
+        <tbody>
+          {deptData.map((d) => (
+            <tr key={d.name}><td>{d.name}</td><td>{d.value}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </CardContent>
+  </Card>
+)}
         <CardContent>
           {recent.isLoading ? (
             <div className="space-y-2">

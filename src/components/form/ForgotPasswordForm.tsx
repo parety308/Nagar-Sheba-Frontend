@@ -27,8 +27,8 @@ export default function ForgotPasswordForm() {
       forgot(value, {
         onSuccess: () => {
           toast.success("Check your email", {
-            description: "We sent a 6-digit reset code.",
-          });
+  description: "If that email is registered, a 6-digit reset code is on its way.",
+});
           router.push(
             `/reset-password?email=${encodeURIComponent(value.email)}`,
           );
