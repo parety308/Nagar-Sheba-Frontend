@@ -53,13 +53,16 @@ export function useGoogleLogin() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: googleLogin,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+    mutationFn: async (idToken: string) => {
+      await googleLogin(idToken);
+      const { data } = await userProfile();
+      return data;
+    },
+    onSuccess: (user) => {
+      queryClient.setQueryData<AuthUser | null>(USER_QUERY_KEY, user);
     },
   });
 }
-
 export function useForgotPassword() {
   return useMutation({ mutationFn: forgotPassword });
 }

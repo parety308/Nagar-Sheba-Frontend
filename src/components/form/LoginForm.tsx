@@ -26,6 +26,7 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import DemoLoginPanel from "./DemoLoginPanel";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -257,7 +258,7 @@ export default function LoginForm() {
           <UserPlus className="size-4 text-primary" />
           Create a new citizen account
         </Link>
-
+<GoogleSignInButton />
         <p className="mt-1 text-center text-xs leading-5 text-muted-foreground">
           By continuing, you agree to our{" "}
           <Link
