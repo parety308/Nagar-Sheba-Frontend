@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
-
+import { useCountdown, useForgotPassword} from "@/hook";
 export default function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -21,6 +21,23 @@ export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: reset, isPending } = useResetPassword();
 
+  const { seconds, restart } = useCountdown(60);
+const { mutate: resendCode, isPending: resending } = useForgotPassword();
+
+const handleResend = () =>
+  resendCode(
+    { email },
+    {
+      onSuccess: () => {
+        toast.success("New code sent");
+        restart();
+      },
+      onError: (error) =>
+        toast.error("Could not resend code", {
+          description: getApiErrorMessage(error),
+        }),
+    },
+  );
   const form = useForm({
     defaultValues: { email, otp: "", newPassword: "" },
     validators: {
@@ -173,14 +190,16 @@ export default function ResetPasswordForm() {
         </Button>
 
         <p className="text-center text-xs text-muted-foreground">
-          Code expired?{" "}
-          <Link
-            href="/forgot-password"
-            className="text-primary underline-offset-4 hover:underline"
-          >
-            Request a new one
-          </Link>
-        </p>
+  Code expired?{" "}
+  <button
+    type="button"
+    onClick={handleResend}
+    disabled={seconds > 0 || resending}
+    className="text-primary underline-offset-4 hover:underline disabled:opacity-50"
+  >
+    {seconds > 0 ? `Resend in ${seconds}s` : "Request a new one"}
+  </button>
+</p>
       </form>
     </div>
   );

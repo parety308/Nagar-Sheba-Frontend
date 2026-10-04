@@ -17,11 +17,14 @@ export const LoginZodSchema = z.object({
 });
 
 export const RegisterZodSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters."),
+  fullName: z.string().min(2, "Full name must be at least 2 characters.").max(100),
   email: z.email("Please provide a valid email address."),
   password: passwordSchema,
-  phone: z.string().min(11, "Please provide a valid phone number."),
-  address: z.string().min(3, "Address is required."),
+  phone: z.string().min(10, "Please provide a valid phone number.").max(20),
+  address: z
+    .string()
+    .max(255)
+    .refine((v) => v === "" || v.length >= 3, "Address must be at least 3 characters."),
 });
 
 export const VerifyEmailZodSchema = z.object({

@@ -15,8 +15,10 @@ export function CategoryCard({ category }: { category: Category }) {
       />
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold leading-snug">
-          {category.name}
-        </h3>
+  <Link href={`/services/${category.id}`} className="hover:text-primary">
+    {category.name}
+  </Link>
+</h3>
         <Badge
           variant={isPaid ? "default" : "secondary"}
           className="h-6 shrink-0 px-2.5 text-xs"

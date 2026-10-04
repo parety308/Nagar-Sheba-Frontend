@@ -39,3 +39,10 @@ export function refundPayment(id: string, payload?: { reason?: string }) {
     body: payload,
   });
 }
+
+export function downloadPaymentReceipt(id: string) {
+  return apiClient<Blob>(`/payments/${id}/receipt`, {
+    method: "GET",
+    responseType: "blob",
+  });
+}

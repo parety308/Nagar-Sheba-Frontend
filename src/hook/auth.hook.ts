@@ -4,6 +4,7 @@ import {
   forgotPassword,
   googleLogin,
   refreshToken,
+  resendVerificationOtp,
   resetPassword,
   updateProfile,
   updateProfileImage,
@@ -131,4 +132,8 @@ export function useUpdateProfileImage() {
       queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
     },
   });
+}
+
+export function useResendVerificationOtp() {
+  return useMutation({ mutationFn: resendVerificationOtp });
 }

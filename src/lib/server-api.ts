@@ -29,3 +29,7 @@ export async function getPublicDepartments() {
 export function getPublicStats() {
   return serverGet<PublicStats>("/public/stats");
 }
+
+export function getPublicCategory(id: string) {
+  return serverGet<Category>(`/categories/${id}`, 60);
+}

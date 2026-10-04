@@ -8,7 +8,7 @@ export type RegisterPayload = {
   email: string;
   password: string;
   phone: string;
-  address: string;
+  address?: string;
 };
 
 export type VerifyEmailPayload = {

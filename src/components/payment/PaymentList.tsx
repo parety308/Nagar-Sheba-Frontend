@@ -20,6 +20,7 @@ import {
 import { usePayments, useUrlState } from "@/hook";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { STATUS_META } from "@/lib/status";
+import { ReceiptButton } from "./ReceiptButton";
 import { RefundDialog } from "./RefundDialog";
 
 const STATUS_OPTIONS = [
@@ -41,13 +42,21 @@ const PROVIDER_LABEL: Record<string, string> = {
   BKASH: "bKash",
 };
 
-type Props = { requestBasePath: string; canRefund?: boolean };
+type Props = {
+  requestBasePath: string;
+  canRefund?: boolean;
+};
 
-export function PaymentList({ requestBasePath, canRefund = false }: Props) {
+export function PaymentList({
+  requestBasePath,
+  canRefund = false,
+}: Props) {
   const { get, getNumber, setParams } = useUrlState();
+
   const page = getNumber("page", 1);
   const status = get("status", "all");
   const provider = get("provider", "all");
+
   const hasFilters = status !== "all" || provider !== "all";
 
   const { data, isLoading, isError, error, refetch } = usePayments({
@@ -70,12 +79,14 @@ export function PaymentList({ requestBasePath, canRefund = false }: Props) {
           options={STATUS_OPTIONS}
           onChange={(value) => setParams({ status: value })}
         />
+
         <FilterSelect
           label="Provider"
           value={provider}
           options={PROVIDER_OPTIONS}
           onChange={(value) => setParams({ provider: value })}
         />
+
         {hasFilters && (
           <Button
             variant="ghost"
@@ -115,11 +126,12 @@ export function PaymentList({ requestBasePath, canRefund = false }: Props) {
                   <TableHead>Status</TableHead>
                   <TableHead>Paid</TableHead>
                   <TableHead>Created</TableHead>
-                  {canRefund && (
-                    <TableHead className="pr-4 text-right">Actions</TableHead>
-                  )}
+                  <TableHead className="pr-4 text-right">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {payments.map((p) => (
                   <TableRow key={p.id}>
@@ -130,35 +142,48 @@ export function PaymentList({ requestBasePath, canRefund = false }: Props) {
                       >
                         {p.request?.trackingRef ?? p.requestId.slice(0, 8)}
                       </Link>
+
                       {p.request?.title && (
                         <p className="max-w-56 truncate text-xs text-muted-foreground">
                           {p.request.title}
                         </p>
                       )}
                     </TableCell>
+
                     <TableCell>
                       {PROVIDER_LABEL[p.provider] ?? p.provider}
                     </TableCell>
+
                     <TableCell className="font-medium">
                       {formatCurrency(p.amount)}
                     </TableCell>
+
                     <TableCell>
                       <StatusBadge status={p.status} />
                     </TableCell>
+
                     <TableCell>{formatDate(p.paidAt)}</TableCell>
+
                     <TableCell>{formatDate(p.createdAt)}</TableCell>
-                    {canRefund && (
-                      <TableCell className="pr-4 text-right">
-                        {p.status === "COMPLETED" && (
+
+                    <TableCell className="pr-4 text-right">
+                      <div className="flex justify-end gap-1">
+                        {(p.status === "COMPLETED" ||
+                          p.status === "REFUNDED") && (
+                          <ReceiptButton payment={p} />
+                        )}
+
+                        {canRefund && p.status === "COMPLETED" && (
                           <RefundDialog payment={p} />
                         )}
-                      </TableCell>
-                    )}
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
+
           <Pagination meta={data?.meta} />
         </>
       )}

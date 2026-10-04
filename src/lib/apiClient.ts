@@ -16,6 +16,7 @@ const NO_REFRESH = [
   "/auth/reset-password",
   "/auth/refresh-token",
   "/auth/logout",
+  "/auth/resend-otp",
 ];
 
 // Single-flight: parallel 401s share one refresh call
@@ -23,18 +24,26 @@ let refreshPromise: Promise<boolean> | null = null;
 
 export function refreshSession() {
   if (!refreshPromise) {
-    refreshPromise = base("/auth/refresh-token", { method: "POST", body: {} })
+    refreshPromise = base("/auth/refresh-token", {
+      method: "POST",
+      body: {},
+    })
       .then(() => true)
       .catch(() => false)
       .finally(() => {
         refreshPromise = null;
       });
   }
+
   return refreshPromise;
 }
 
 type Req = Parameters<typeof base>[0];
-type Opts = Parameters<typeof base>[1];
+type BaseOpts = Parameters<typeof base>[1];
+
+type Opts = BaseOpts & {
+  responseType?: "json" | "blob";
+};
 
 async function request(req: Req, opts?: Opts) {
   try {
@@ -49,11 +58,11 @@ async function request(req: Req, opts?: Opts) {
     if (canRefresh && (await refreshSession())) {
       return base(req, opts);
     }
+
     throw error;
   }
 }
 
-// Keep the original call signature so every existing api file stays unchanged
 const apiClient = request as unknown as typeof base;
 
 export default apiClient;

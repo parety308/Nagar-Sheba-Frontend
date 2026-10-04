@@ -87,3 +87,10 @@ export function changePassword(payload: ChangePasswordPayload) {
     body: payload,
   });
 }
+
+export function resendVerificationOtp(payload: { email: string }) {
+  return apiClient<ApiResponse<null>>("/auth/resend-otp", {
+    method: "POST",
+    body: payload,
+  });
+}

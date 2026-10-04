@@ -5,7 +5,7 @@ import { MailCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useVerifyEmail } from "@/hook";
+import { useCountdown, useResendVerificationOtp, useVerifyEmail } from "@/hook";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { VerifyEmailZodSchema } from "@/validation";
 import { Button } from "../ui/button";
@@ -18,7 +18,22 @@ export default function VerifyEmailForm() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
   const { mutate: verify, isPending } = useVerifyEmail();
-
+const { seconds, restart } = useCountdown(60);
+const { mutate: resend, isPending: resending } = useResendVerificationOtp();
+const handleResend = () =>
+  resend(
+    { email },
+    {
+      onSuccess: () => {
+        toast.success("New code sent", { description: "Check your inbox." });
+        restart();
+      },
+      onError: (error) =>
+        toast.error("Could not resend code", {
+          description: getApiErrorMessage(error),
+        }),
+    },
+  );
   const form = useForm({
     defaultValues: { email, otp: "" },
     validators: {
@@ -126,15 +141,25 @@ export default function VerifyEmailForm() {
           )}
         </Button>
 
-        <p className="text-center text-xs text-muted-foreground">
-          Code expired or wrong email?{" "}
-          <Link
-            href="/register"
-            className="text-primary underline-offset-4 hover:underline"
-          >
-            Register again
-          </Link>
-        </p>
+       <div className="space-y-1 text-center text-xs text-muted-foreground">
+  <p>
+    Didn't get the code?{" "}
+    <button
+      type="button"
+      onClick={handleResend}
+      disabled={seconds > 0 || resending}
+      className="text-primary underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:no-underline disabled:opacity-50"
+    >
+      {seconds > 0 ? `Resend in ${seconds}s` : resending ? "Sending..." : "Resend code"}
+    </button>
+  </p>
+  <p>
+    Wrong email?{" "}
+    <Link href="/register" className="text-primary underline-offset-4 hover:underline">
+      Register again
+    </Link>
+  </p>
+</div>
       </form>
     </div>
   );
