@@ -37,6 +37,7 @@ export const NAV_ITEMS: Record<UserRole, NavItem[]> = {
     { label: "Overview", href: "/staff", icon: LayoutDashboard },
     { label: "Request Queue", href: "/staff/requests", icon: ClipboardList },
     { label: "Notifications", href: "/staff/notifications", icon: Bell },
+    { label: "Performance", href: "/staff/performance", icon: ChartColumn },
     { label: "Profile", href: "/staff/profile", icon: UserRound },
   ],
   ADMIN: [

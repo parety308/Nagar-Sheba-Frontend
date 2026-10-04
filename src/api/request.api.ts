@@ -1,5 +1,6 @@
 import apiClient from "@/lib/apiClient";
 import { postFormWithProgress } from "@/lib/upload";
+import { StaffPerformance } from "@/types";
 import type { ApiResponse } from "@/types/api.type";
 import type {
   Attachment,
@@ -95,4 +96,11 @@ export function addRequestAttachments(
     formData,
     onProgress,
   );
+}
+
+
+export function getStaffPerformance() {
+  return apiClient<ApiResponse<StaffPerformance>>("/requests/performance/me", {
+    method: "GET",
+  });
 }

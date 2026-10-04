@@ -9,3 +9,4 @@ export * from "./payment.type";
 export * from "./public.type";
 export * from "./request.type";
 export * from "./user.type";
+export * from "./staff.type";

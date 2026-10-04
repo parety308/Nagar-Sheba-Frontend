@@ -10,6 +10,7 @@ import {
   createServiceRequest,
   getRequest,
   getRequests,
+  getStaffPerformance,
   reassignRequest,
   reopenRequest,
   searchRequests,
@@ -23,6 +24,7 @@ function useInvalidateRequests() {
   return (id?: string, opts: { payments?: boolean } = {}) => {
     queryClient.invalidateQueries({ queryKey: ["requests"] });
     queryClient.invalidateQueries({ queryKey: ["request-search"] });
+    queryClient.invalidateQueries({ queryKey: ["staff-performance"] });
     if (id) queryClient.invalidateQueries({ queryKey: ["request", id] });
     if (opts.payments)
       queryClient.invalidateQueries({ queryKey: ["payments"] });
@@ -143,5 +145,12 @@ export function useAddRequestAttachments() {
       onProgress?: (percent: number) => void;
     }) => addRequestAttachments(id, formData, onProgress),
     onSuccess: (_, variables) => invalidate(variables.id),
+  });
+}
+
+export function useStaffPerformance() {
+  return useQuery({
+    queryKey: ["staff-performance"],
+    queryFn: getStaffPerformance,
   });
 }
