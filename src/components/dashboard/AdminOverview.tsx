@@ -97,7 +97,7 @@ export function AdminOverview() {
     },
   ];
 
-  const deptData = (s.requests.byDepartment ?? []).map((d) => ({
+ const deptData = s.requests.byDepartment.map((d) => ({
   name: d.name,
   value: d.total,
 }));
@@ -280,109 +280,120 @@ export function AdminOverview() {
             </table>
           </CardContent>
         </Card>
-      </div>
+         </div>
 
-      <Card>
-        <CardHeader className="flex-row items-center justify-between">
-          <CardTitle>Latest requests</CardTitle>
-          <Link
-            href="/admin/requests"
-            className="text-xs font-medium text-primary underline-offset-4 hover:underline"
-          >
-            View all
-          </Link>
+    {deptData.length > 0 && (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Requests by department</CardTitle>
         </CardHeader>
-
-{deptData.length > 0 && (
-  <Card className="mb-6">
-    <CardHeader>
-      <CardTitle>Requests by department</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div
-        role="img"
-        aria-label="Bar chart of request counts by department"
-        className="w-full"
-        style={{ height: Math.max(deptData.length * 48, 160) }}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={deptData}
-            layout="vertical"
-            margin={{ left: 8, right: 16 }}
-          >
-            <CartesianGrid
-              horizontal={false}
-              stroke="var(--border)"
-              strokeDasharray="3 3"
-            />
-            <XAxis type="number" allowDecimals={false} tick={tick} />
-            <YAxis type="category" dataKey="name" width={150} tick={tick} />
-            <Tooltip
-              contentStyle={tooltipStyle}
-              cursor={{ fill: "var(--muted)", opacity: 0.4 }}
-            />
-            <Bar
-              dataKey="value"
-              name="Requests"
-              fill="var(--chart-3)"
-              radius={[0, 4, 4, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <table className="sr-only">
-        <caption>Requests by department</caption>
-        <thead>
-          <tr><th>Department</th><th>Requests</th></tr>
-        </thead>
-        <tbody>
-          {deptData.map((d) => (
-            <tr key={d.name}><td>{d.name}</td><td>{d.value}</td></tr>
-          ))}
-        </tbody>
-      </table>
-    </CardContent>
-  </Card>
-)}
         <CardContent>
-          {recent.isLoading ? (
-            <div className="space-y-2">
-              {Array.from({ length: 5 }, (_, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton list
-                <Skeleton key={i} className="h-12 w-full" />
+          <div
+            role="img"
+            aria-label="Bar chart of request counts by department"
+            className="w-full"
+            style={{ height: Math.max(deptData.length * 48, 160) }}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={deptData}
+                layout="vertical"
+                margin={{ left: 8, right: 16 }}
+              >
+                <CartesianGrid
+                  horizontal={false}
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                />
+                <XAxis type="number" allowDecimals={false} tick={tick} />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={150}
+                  tick={tick}
+                />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  cursor={{ fill: "var(--muted)", opacity: 0.4 }}
+                />
+                <Bar
+                  dataKey="value"
+                  name="Requests"
+                  fill="var(--chart-3)"
+                  radius={[0, 4, 4, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <table className="sr-only">
+            <caption>Requests by department</caption>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Requests</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deptData.map((d) => (
+                <tr key={d.name}>
+                  <td>{d.name}</td>
+                  <td>{d.value}</td>
+                </tr>
               ))}
-            </div>
-          ) : (recent.data?.data ?? []).length === 0 ? (
-            <EmptyState
-              icon={Inbox}
-              title="No requests yet"
-              description="New requests will show up here."
-            />
-          ) : (
-            <ul className="divide-y">
-              {recent.data?.data.map((r) => (
-                <li key={r.id}>
-                  <Link
-                    href={`/admin/requests/${r.id}`}
-                    className="flex items-center justify-between gap-3 py-3 hover:bg-muted/50"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{r.title}</p>
-                      <p className="font-mono text-xs text-muted-foreground">
-                        {r.trackingRef} · {r.department?.name} ·{" "}
-                        {formatDate(r.createdAt)}
-                      </p>
-                    </div>
-                    <StatusBadge status={r.status} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+            </tbody>
+          </table>
         </CardContent>
       </Card>
-    </div>
-  );
+    )}
+
+    <Card>
+      <CardHeader className="flex-row items-center justify-between">
+        <CardTitle>Latest requests</CardTitle>
+        <Link
+          href="/admin/requests"
+          className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+        >
+          View all
+        </Link>
+      </CardHeader>
+      <CardContent>
+        {recent.isLoading ? (
+          <div className="space-y-2">
+            {Array.from({ length: 5 }, (_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton list
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        ) : (recent.data?.data ?? []).length === 0 ? (
+          <EmptyState
+            icon={Inbox}
+            title="No requests yet"
+            description="New requests will show up here."
+          />
+        ) : (
+          <ul className="divide-y">
+            {recent.data?.data.map((r) => (
+              <li key={r.id}>
+                <Link
+                  href={`/admin/requests/${r.id}`}
+                  className="flex items-center justify-between gap-3 py-3 hover:bg-muted/50"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{r.title}</p>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {r.trackingRef} · {r.department?.name} ·{" "}
+                      {formatDate(r.createdAt)}
+                    </p>
+                  </div>
+                  <StatusBadge status={r.status} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
+  </div>
+);
 }

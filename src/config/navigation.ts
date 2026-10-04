@@ -1,6 +1,7 @@
 import {
   Bell,
   Building2,
+  ChartColumn,
   ClipboardList,
   CreditCard,
   FilePlus,
@@ -46,7 +47,8 @@ export const NAV_ITEMS: Record<UserRole, NavItem[]> = {
     { label: "Users & Staff", href: "/admin/users", icon: Users },
     { label: "Payments", href: "/admin/payments", icon: Wallet },
     { label: "Feedback", href: "/admin/feedbacks", icon: MessageSquareText },
-    { label: "Audit Logs", href: "/admin/audit-logs", icon: ScrollText },
+    { label: "Reports", href: "/admin/reports", icon: ChartColumn },
+ { label: "Audit Logs", href: "/admin/audit-logs", icon: ScrollText },
     { label: "Notifications", href: "/admin/notifications", icon: Bell },
     { label: "Profile", href: "/admin/profile", icon: UserRound },
   ],

@@ -36,8 +36,8 @@ export type DashboardStats = {
     total: number;
     overdue: number;
     byStatus: Record<string, number>;
+    byDepartment: { departmentId: string; name: string; total: number }[];
   };
   payments: { totalRevenue: string | number; pending: number };
   feedback: { averageRating: number | null };
-  byDepartment?: { departmentId: string; name: string; total: number }[];
 };
