@@ -10,15 +10,26 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePayments, useProfile } from "@/hook";
-import { formatCurrency } from "@/lib/format";
+import { formatCurrency, formatDateTime } from "@/lib/format";
 import { getRoleHome } from "@/lib/roles";
 import { cn } from "@/lib/utils";
+import { ReceiptButton } from "./ReceiptButton";
 
 type Outcome = "success" | "fail" | "cancel";
 
+const PROVIDER_LABEL: Record<string, string> = {
+  SSLCOMMERZ: "SSLCommerz",
+  BKASH: "bKash",
+};
+
 const COPY: Record<
   Outcome,
-  { icon: LucideIcon; tone: string; title: string; text: string }
+  {
+    icon: LucideIcon;
+    tone: string;
+    title: string;
+    text: string;
+  }
 > = {
   success: {
     icon: CircleCheck,
@@ -46,13 +57,14 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
   const ref = params.get("tran_id") ?? params.get("paymentID");
 
   const { data: profile } = useProfile();
-  const { data, isLoading } = usePayments({
+
+  const { data, isLoading, refetch } = usePayments({
     limit: 20,
     sortBy: "createdAt",
     sortOrder: "desc",
   });
 
-  // The backend already updated the request; make sure cached data is refreshed.
+  // Refresh request and notification data after returning from payment.
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["requests"] });
     queryClient.invalidateQueries({ queryKey: ["request"] });
@@ -63,13 +75,28 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
     ? data?.data.find((p) => p.providerRef === ref)
     : undefined;
 
-  // The success redirect can arrive even if verification failed server-side,
-  // so trust the real payment status once it has loaded.
+  // The success redirect can arrive even when the server has not
+  // finished processing the gateway callback/IPN.
   const effective: Outcome =
     outcome === "success" && payment?.status === "FAILED" ? "fail" : outcome;
-  const confirming = outcome === "success" && payment?.status === "PENDING";
+
+  const confirming =
+    outcome === "success" && payment?.status === "PENDING";
+
+  // Poll while the payment is still pending.
+  useEffect(() => {
+    if (!confirming) return;
+
+    const id = setInterval(() => {
+      refetch();
+    }, 3000);
+
+    return () => clearInterval(id);
+  }, [confirming, refetch]);
 
   const { icon: Icon, tone, title, text } = COPY[effective];
+
+  const paid = payment?.status === "COMPLETED";
 
   return (
     <div className="rounded-xl border bg-card p-8 text-center shadow-lg">
@@ -100,13 +127,29 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
       {ref && (
         <div className="mt-6 animate-page-in rounded-lg border bg-muted/40 p-4 text-left text-sm">
           {isLoading ? (
-            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-24 w-full" />
           ) : payment ? (
             <dl className="space-y-2">
+              {payment.request && (
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Request</dt>
+                  <dd className="font-mono text-xs font-medium">
+                    {payment.request.trackingRef}
+                  </dd>
+                </div>
+              )}
+
               <div className="flex justify-between gap-4">
                 <dt className="text-muted-foreground">Amount</dt>
                 <dd className="font-medium">
                   {formatCurrency(payment.amount)}
+                </dd>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Method</dt>
+                <dd className="font-medium">
+                  {PROVIDER_LABEL[payment.provider] ?? payment.provider}
                 </dd>
               </div>
 
@@ -117,15 +160,24 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
                 </dd>
               </div>
 
+              {payment.paidAt && (
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Paid at</dt>
+                  <dd className="font-medium">
+                    {formatDateTime(payment.paidAt)}
+                  </dd>
+                </div>
+              )}
+
               <div className="flex justify-between gap-4">
-                <dt className="text-muted-foreground">Reference</dt>
+                <dt className="text-muted-foreground">Transaction ID</dt>
                 <dd className="truncate font-mono text-xs">
                   {payment.providerRef}
                 </dd>
               </div>
             </dl>
           ) : (
-            <p className="font-mono text-xs break-all text-muted-foreground">
+            <p className="break-all font-mono text-xs text-muted-foreground">
               Reference: {ref}
             </p>
           )}
@@ -133,6 +185,10 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
       )}
 
       <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+        {payment && paid && (
+          <ReceiptButton payment={payment} />
+        )}
+
         {payment && (
           <Link
             href={`/citizen/requests/${payment.requestId}`}
@@ -144,7 +200,10 @@ export function PaymentResult({ outcome }: { outcome: Outcome }) {
 
         <Link
           href={profile ? getRoleHome(profile.role) : "/"}
-          className={cn(buttonVariants({ variant: "outline" }), "h-10 px-4")}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-10 px-4",
+          )}
         >
           {profile ? "Go to dashboard" : "Back to home"}
         </Link>
