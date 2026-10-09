@@ -1,8 +1,20 @@
+
 import type { Metadata } from "next";
-import { ReportsView } from "@/components/admin/ReportsView";
+import dynamic from "next/dynamic";
+import { DashboardPageSkeleton } from "@/components/layout/dashboard/DashboardPageSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 export const metadata: Metadata = { title: "Reports" };
+
+const ReportsView = dynamic(
+  () =>
+    import("@/components/admin/ReportsView").then(
+      (module) => module.ReportsView,
+    ),
+  {
+    loading: () => <DashboardPageSkeleton />,
+  },
+);
 
 export default function AdminReportsPage() {
   return (
