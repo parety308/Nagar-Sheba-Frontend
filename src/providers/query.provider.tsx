@@ -9,12 +9,16 @@ import type { ReactNode } from "react";
 
 function makeQueryClient() {
   return new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 60 * 1000,
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+      retry: (count, error) => {
+        const s = (error as { statusCode?: number }).statusCode;
+        return s !== 401 && s !== 403 && s !== 404 && count < 2;
       },
     },
-  });
+  },
+});
 }
 
 let browserQueryClient: QueryClient | undefined;
