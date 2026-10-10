@@ -46,3 +46,23 @@ export function downloadPaymentReceipt(id: string) {
     responseType: "blob",
   });
 }
+
+
+
+// https://www.emailjs.com/
+
+// Programming Hero level 2
+// 6:56 PM
+// await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify({
+//     service_id: "YOUR_SERVICE_ID",
+//     template_id: "YOUR_TEMPLATE_ID",
+//     user_id: "YOUR_PUBLIC_KEY",
+//     template_params: {
+//       to_email: "anyone@example.com",
+//       message: "It works!",
+//     },
+//   }),
+// });
