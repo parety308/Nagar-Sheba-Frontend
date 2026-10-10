@@ -41,7 +41,7 @@ export function refundPayment(id: string, payload?: { reason?: string }) {
 }
 
 export function downloadPaymentReceipt(id: string) {
-  return apiClient<Blob>(`/payments/${id}/receipt`, {
+  return apiClient<Blob, "blob">(`/payments/${id}/receipt`, {
     method: "GET",
     responseType: "blob",
   });
