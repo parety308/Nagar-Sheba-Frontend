@@ -14,7 +14,7 @@ import {
   getPublicDepartments,
   getPublicStats,
 } from "@/lib/server-api";
-
+import {config} from "../../../config/index"
 export const metadata: Metadata = {
   title: { absolute: "Nagar Sheba | Smart City Services for Citizens" },
   description:
@@ -33,6 +33,7 @@ export default async function HomePage() {
     getPublicCategories(),
     getPublicDepartments(),
   ]);
+  console.log(config.apiUrl)
 
   return (
     <>
